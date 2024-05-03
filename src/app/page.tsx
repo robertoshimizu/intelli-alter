@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { useChat } from 'ai/react'
+import { TitleLogoLight } from './components/ui/logos'
 
 type Message = {
   id: number
@@ -14,26 +15,13 @@ export default function Home() {
   })
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
+    <main className="flex min-h-screen flex-col items-center justify-between py-1 px-2">
+      <div className="mx-auto py-2">
+        <TitleLogoLight width={200} />
       </div>
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-      <article className="mt-16 text-center lg:mt-32 lg:text-left">
-        <h1 className="text-2xl font-bold">
+      <article className="mt-8 text-center lg:mt-32 lg:text-left">
+        <h1 className="text-lg font-bold">
           RCT – 2ry analysis | Aerobic exercise intervention shows potential to
           reduce chemotherapy-induced peripheral neuropathy
         </h1>
@@ -106,7 +94,7 @@ export default function Home() {
       </article>
 
       <section>
-        <div className="mx-auto w-full max-w-md py-24 flex flex-col stretch">
+        <div className="w-full max-w-md sm:max-w-2xl  py-12 flex flex-col stretch ">
           {messages.length > 0
             ? messages.map((m) => (
                 <div key={m.id} className="whitespace-pre-wrap">
@@ -118,7 +106,8 @@ export default function Home() {
 
           <form onSubmit={handleSubmit}>
             <input
-              className="fixed w-full max-w-2xl bottom-0 border border-gray-300 rounded mb-8 shadow-xl p-2"
+              className="fixed inset-x-0 bottom-0 mx-1 w-full max-w-md sm:max-w-2xl 
+              border border-gray-300 rounded mb-8 shadow-xl p-2 text-black"
               value={input}
               placeholder="O que você quer saber sobre este artigo?"
               onChange={handleInputChange}
