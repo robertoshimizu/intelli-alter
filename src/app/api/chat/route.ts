@@ -1,5 +1,5 @@
 import { openai } from '@ai-sdk/openai'
-import { StreamingTextResponse, streamText } from 'ai'
+import { StreamingTextResponse, streamText, StreamData } from 'ai'
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge'
@@ -12,5 +12,15 @@ export async function POST(req: Request) {
     messages
   })
 
-  return new StreamingTextResponse(result.toAIStream())
+  const data = new StreamData()
+
+  data.append({ test: 'value' })
+
+  const stream = result.toAIStream({
+    onFinal(_) {
+      data.close()
+    }
+  })
+
+  return new StreamingTextResponse(stream, {}, data)
 }
