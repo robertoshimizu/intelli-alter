@@ -12,9 +12,12 @@ const mistralInstance = createMistral({
 })
 
 export async function POST(req: Request) {
-  const { messages } = await req.json() // Assuming modelType is provided in the request
+  const request = await req.json() // Assuming modelType is provided in the request
+  //console.log(request)
 
-  const modelType: string = 'gemini'
+  const { messages, data } = request
+
+  const modelType: string = data.model
 
   // Dynamically selecting the model based on modelType
   let model
@@ -42,22 +45,27 @@ export async function POST(req: Request) {
       throw new Error(`Unsupported model type: ${modelType}`)
   }
 
+  console.log('Selected model:', modelType)
+
   const result = await streamText({
     model,
+    temperature: 0.0,
     system:
       'You are a helpful assistant that can answer questions and provide information. You must always answer in language of the user and provide accurate information.',
     messages
   })
 
-  const data = new StreamData()
+  // data = new StreamData()
 
-  data.append({ test: 'value' })
+  // data.append({ test: 'value' })
 
-  const stream = result.toAIStream({
-    onFinal(_) {
-      data.close()
-    }
-  })
+  // const stream = result.toAIStream({
+  //   onFinal(_) {
+  //     data.close()
+  //   }
+  // })
+  const stream = result.toAIStream()
 
-  return new StreamingTextResponse(stream, {}, data)
+  // return new StreamingTextResponse(stream, {}, data)
+  return new StreamingTextResponse(stream, {})
 }
