@@ -1,63 +1,22 @@
 'use client'
-import Image from 'next/image'
-import { useChat } from 'ai/react'
-import { useState } from 'react'
-import { TitleLogoLight } from './components/ui/logos'
-
-type Message = {
-  id: number
-  role: 'user' | 'ai'
-  content: string
-}
 
 export default function Home() {
-  const [model, setModel] = useState('gemini') // Default model
-  const { messages, input, handleInputChange, handleSubmit, data } = useChat({
-    api: '/api/chat',
-    body: {
-      data: {
-        model: model
-      }
-    },
-    sendExtraMessageFields: true,
-    streamMode: 'stream-data'
-  })
-
-  const handleModelChange = (event: any) => {
-    setModel(event.target.value)
-  }
-
   return (
-    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-      {/* Model selection dropdown */}
-      <div className="mb-4">
-        <select
-          value={model}
-          onChange={handleModelChange}
-          className="p-2 border border-gray-300 rounded"
-        >
-          <option value="mistral">Mistral</option>
-          <option value="openai">OpenAI</option>
-          <option value="gemini">Gemini</option>
-          <option value="anthropic">Anthropic</option>
-        </select>
-      </div>
-
-      {messages.map((m) => (
-        <div key={m.id} className="whitespace-pre-wrap">
-          {m.role === 'user' ? 'User: ' : 'AI: '}
-          {m.content}
-        </div>
-      ))}
-
-      <form onSubmit={handleSubmit}>
-        <input
-          className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl text-black"
-          value={input}
-          placeholder="Say something..."
-          onChange={handleInputChange}
-        />
-      </form>
+    <div className="flex flex-col w-full max-w-2xl py-24 mx-auto stretch">
+      <h1 className="text-4xl font-bold">Welcome to the AI Chatbot</h1>
+      <p className="mt-4">
+        This is a simple chatbot that can answer questions and provide
+        information. It uses the GPT-3.5 model from OpenAI to generate
+        responses.
+      </p>
+      <p className="mt-4">
+        To get started, simply type a message in the input box below and press
+        Enter. The chatbot will respond with a generated message.
+      </p>
+      <p className="mt-4">
+        You can also select a different model from the dropdown menu to see how
+        the responses differ.
+      </p>
     </div>
   )
 }
