@@ -1,8 +1,9 @@
 'use client'
 
 import React from 'react'
-import { Card, CardHeader } from '../ui/card'
-import Header from '@/components/auth/header'
+import { Card, CardContent, CardFooter, CardHeader } from '../ui/card'
+import { Header } from '@/components/auth/header'
+import { Social } from '@/components/auth/social'
 
 interface CardWrapperProps {
   children: React.ReactNode
@@ -24,7 +25,12 @@ export const CardWrapper = ({
       <CardHeader>
         <Header label={headerLabel} />
       </CardHeader>
-      {children}
+      <CardContent>{children}</CardContent>
+      {showSocial && (
+        <CardFooter>
+          <Social />
+        </CardFooter>
+      )}
     </Card>
   )
 }
