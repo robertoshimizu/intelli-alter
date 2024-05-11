@@ -1,63 +1,34 @@
-'use client'
-import Image from 'next/image'
-import { useChat } from 'ai/react'
-import { useState } from 'react'
-import { TitleLogoLight } from './components/ui/logos'
+import { Poppins } from 'next/font/google'
+import { cn } from '@/lib/utils/utils'
+import { Button } from '@/components/ui/button'
+import LoginButton from '@/components/auth/login-button'
 
-type Message = {
-  id: number
-  role: 'user' | 'ai'
-  content: string
-}
+const font = Poppins({
+  subsets: ['latin'],
+  weight: ['600']
+})
 
 export default function Home() {
-  const [model, setModel] = useState('gemini') // Default model
-  const { messages, input, handleInputChange, handleSubmit, data } = useChat({
-    api: '/api/chat',
-    body: {
-      data: {
-        model: model
-      }
-    },
-    sendExtraMessageFields: true,
-    streamMode: 'stream-data'
-  })
-
-  const handleModelChange = (event: any) => {
-    setModel(event.target.value)
-  }
-
   return (
-    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-      {/* Model selection dropdown */}
-      <div className="mb-4">
-        <select
-          value={model}
-          onChange={handleModelChange}
-          className="p-2 border border-gray-300 rounded"
+    <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
+      <div className="space-y-6 text-center">
+        <h1
+          className={cn(
+            'text-6xl font-semibold text-white drop-shadow-md',
+            font.className
+          )}
         >
-          <option value="mistral">Mistral</option>
-          <option value="openai">OpenAI</option>
-          <option value="gemini">Gemini</option>
-          <option value="anthropic">Anthropic</option>
-        </select>
-      </div>
-
-      {messages.map((m) => (
-        <div key={m.id} className="whitespace-pre-wrap">
-          {m.role === 'user' ? 'User: ' : 'AI: '}
-          {m.content}
+          🔐 Auth
+        </h1>
+        <p className="text-white text-lg">A simple authentication service</p>
+        <div>
+          <LoginButton mode="redirect">
+            <Button variant="secondary" size="lg">
+              Sign in
+            </Button>
+          </LoginButton>
         </div>
-      ))}
-
-      <form onSubmit={handleSubmit}>
-        <input
-          className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl text-black"
-          value={input}
-          placeholder="Say something..."
-          onChange={handleInputChange}
-        />
-      </form>
-    </div>
+      </div>
+    </main>
   )
 }
