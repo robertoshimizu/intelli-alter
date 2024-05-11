@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils/utils'
 import { Button } from '@/components/ui/button'
 import LoginButton from '@/components/auth/login-button'
 
-export const font = Poppins({
+const font = Poppins({
   subsets: ['latin'],
   weight: ['600']
 })
