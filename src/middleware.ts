@@ -1,11 +1,15 @@
-import { auth } from './auth'
+import { auth } from '@/auth'
 
 // By default I want all requests invoke middleware
 export default auth((req) => {
-  console.log('ROUTE: ', req.url)
+  const isLoggedIn = !!req.auth
+  console.log('ROUTE: ', req.nextUrl.pathname)
+  console.log('isLoggedIn: ', isLoggedIn)
 })
 
 // Optionally, don't invoke middleware for specific routes
 export const config = {
-  matcher: '/api/rss_read'
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)']
 }
+// prisma is already running on Edge Runtime
+export const runtime = 'experimental-edge'
