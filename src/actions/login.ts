@@ -5,6 +5,8 @@ import { LoginSchema } from '@/schemas'
 import { AuthError } from 'next-auth'
 import { signIn } from '@/auth'
 import * as z from 'zod'
+import { getUserByEmail } from '@/data/user'
+import { generateVerificationToken } from '@/lib/tokens'
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values)
@@ -14,7 +16,19 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   }
 
   const { email, password } = validatedFields.data
-  console.log('email', email)
+
+  const existingUser = await getUserByEmail(email)
+
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return { error: 'Email or password do not match in our records' }
+  }
+
+  if (!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(
+      existingUser.email
+    )
+    return { success: 'Confirmation email sent!' }
+  }
 
   try {
     await signIn('credentials', {
@@ -28,6 +42,18 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       switch (error.type) {
         case 'CredentialsSignin':
           return { error: 'Invalid credentials!' }
+        case 'OAuthAccountNotLinked':
+          return {
+            error:
+              'Another account already exists with the same e-mail address!'
+          }
+        case 'AccountNotLinked':
+          return {
+            error:
+              'Another account already exists with the same e-mail address!'
+          }
+        case 'CallbackRouteError':
+          return { error: 'Callback route error!' }
 
         default:
           return { error: 'An error occurred!' }

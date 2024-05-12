@@ -1,4 +1,4 @@
-import log from '@/lib/utils/logging-service'
+import log from '@/lib/logging-service'
 import NextAuth, { type DefaultSession } from 'next-auth'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
@@ -63,12 +63,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     })
   ],
   callbacks: {
-    // async signIn({ user }) {
-    //   const existingUser = await getUserById(user?.id ?? '')
-    //   // If I want to block users that did not verify their email
-    //   if (!existingUser || !existingUser.emailVerified) return false
-    //   return true
-    // },
+    async signIn({ user, account }) {
+      // Allow OAuth withouth email verification
+      if (account?.provider !== 'credentials') {
+        return true
+      }
+      const existingUser = await getUserById(user?.id ?? '')
+      // If I want to block users that did not verify their email
+      if (!existingUser || !existingUser.emailVerified) return false
+
+      // TODO: Add 2FA verification
+
+      return true
+    },
     async jwt({ token }) {
       if (!token.sub) return token
 
@@ -100,7 +107,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }
   },
   pages: {
-    signIn: '/auth/login'
+    signIn: '/auth/login',
+    error: '/auth/error'
   },
   logger: {
     error(code, ...message) {
@@ -111,6 +119,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     debug(code, ...message) {
       log.debug(code, ...message)
+    }
+  },
+  // events
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: {
+          emailVerified: new Date()
+        }
+      }) // update user
     }
   }
 })
