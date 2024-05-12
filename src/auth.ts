@@ -17,6 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: 'jwt' },
   debug: false,
   providers: [
+    GitHub,
     Credentials({
       async authorize(credentials) {
         const validatedFields = LoginSchema.safeParse(credentials)
