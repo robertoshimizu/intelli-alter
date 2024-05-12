@@ -1,7 +1,5 @@
 import { db } from '@/lib/db'
 
-export const runtime = 'edge'
-
 export const getUserByEmail = async (email: string) => {
   try {
     return db.user.findFirst({
