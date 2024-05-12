@@ -63,12 +63,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     })
   ],
   callbacks: {
-    // async signIn({ user }) {
-    //   const existingUser = await getUserById(user?.id ?? '')
-    //   // If I want to block users that did not verify their email
-    //   if (!existingUser || !existingUser.emailVerified) return false
-    //   return true
-    // },
+    async signIn({ user, account }) {
+      // Allow OAuth withouth email verification
+      if (account?.provider !== 'credentials') {
+        return true
+      }
+      const existingUser = await getUserById(user?.id ?? '')
+      // If I want to block users that did not verify their email
+      if (!existingUser || !existingUser.emailVerified) return false
+
+      // TODO: Add 2FA verification
+
+      return true
+    },
     async jwt({ token }) {
       if (!token.sub) return token
 
