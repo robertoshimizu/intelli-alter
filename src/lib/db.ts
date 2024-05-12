@@ -8,4 +8,6 @@ declare global {
 
 export const db = globalThis.prisma || new PrismaClient()
 
+console.log('prisma client initialized... at: ', process.env.NODE_ENV)
+
 if (process.env.NODE_ENV !== 'production') globalThis.prisma = db
