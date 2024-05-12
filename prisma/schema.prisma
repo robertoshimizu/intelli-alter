@@ -67,9 +67,10 @@ model Session {
 }
  
 model VerificationToken {
-  identifier String
-  token      String
+  id         String @id @default(cuid())
+  email      String
+  token      String @unique
   expires    DateTime
  
-  @@id([identifier, token])
+  @@unique([id, token])
 }

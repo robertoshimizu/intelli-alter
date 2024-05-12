@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { useTheme } from 'next-themes'
 
-import { cn } from '@/lib/utils/utils'
+import { cn } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 
 function LogoOpenAI({ className, ...props }: React.ComponentProps<'svg'>) {
