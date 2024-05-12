@@ -1,6 +1,7 @@
 import log from '@/lib/utils/logging-service'
 import NextAuth, { type DefaultSession } from 'next-auth'
 import GitHub from 'next-auth/providers/github'
+import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { PrismaClient } from '@prisma/client'
@@ -8,8 +9,6 @@ import { db } from '@/lib/db'
 import { LoginSchema } from './schemas'
 import { getUserByEmail, getUserById } from './data/user'
 import bcrypt from 'bcryptjs'
-
-const prisma = new PrismaClient()
 
 declare module 'next-auth' {
   /**
@@ -40,6 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   debug: false,
   providers: [
     GitHub,
+    Google,
     Credentials({
       async authorize(credentials) {
         const validatedFields = LoginSchema.safeParse(credentials)
