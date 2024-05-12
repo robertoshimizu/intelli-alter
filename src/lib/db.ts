@@ -3,7 +3,7 @@ import { PrismaNeon } from '@prisma/adapter-neon'
 import { Pool } from '@neondatabase/serverless'
 
 // This boiler plate is to circunvent Nextjs hot reload, to avoid reinitializing the prisma client on every hot reload
-
+export const runtime = 'edge'
 declare global {
   var prisma: PrismaClient | undefined
 }
