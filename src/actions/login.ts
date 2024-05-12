@@ -28,6 +28,18 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
       switch (error.type) {
         case 'CredentialsSignin':
           return { error: 'Invalid credentials!' }
+        case 'OAuthAccountNotLinked':
+          return {
+            error:
+              'Another account already exists with the same e-mail address!'
+          }
+        case 'AccountNotLinked':
+          return {
+            error:
+              'Another account already exists with the same e-mail address!'
+          }
+        case 'CallbackRouteError':
+          return { error: 'Callback route error!' }
 
         default:
           return { error: 'An error occurred!' }
