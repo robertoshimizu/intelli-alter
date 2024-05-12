@@ -6,6 +6,8 @@ import Credentials from 'next-auth/providers/credentials'
 import { LoginSchema } from './schemas'
 import { getUserByEmail, getUserById } from './data/user'
 import bcrypt from 'bcryptjs'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import { db } from '@/lib/db'
 
 declare module 'next-auth' {
   /**
@@ -35,7 +37,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: 'jwt' },
   debug: false,
   providers: [
-    GitHub,
+    GitHub({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET
+    }),
     Google,
     Credentials({
       async authorize(credentials) {
