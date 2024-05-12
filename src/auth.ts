@@ -3,11 +3,11 @@ import NextAuth, { type DefaultSession } from 'next-auth'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
-import { PrismaNeon } from '@prisma/adapter-neon'
-import { Pool } from '@neondatabase/serverless'
 import { LoginSchema } from './schemas'
 import { getUserByEmail, getUserById } from './data/user'
 import bcrypt from 'bcryptjs'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import { db } from '@/lib/db'
 
 declare module 'next-auth' {
   /**
@@ -31,17 +31,16 @@ declare module 'next-auth' {
   }
 }
 
-const neon = new Pool({ connectionString: process.env.DATABASE_URL })
-
-const adapter = new PrismaNeon(neon)
-
 export const { handlers, signIn, signOut, auth } = NextAuth({
   // @ts-ignore
-  adapter: adapter,
+  adapter: PrismaAdapter(db),
   session: { strategy: 'jwt' },
   debug: false,
   providers: [
-    GitHub,
+    GitHub({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET
+    }),
     Google,
     Credentials({
       async authorize(credentials) {
