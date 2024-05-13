@@ -1,5 +1,6 @@
 'use client'
-import { useSession } from 'next-auth/react'
+import { Button } from '@/components/ui/button'
+import { useSession, signOut } from 'next-auth/react'
 
 export default function HomePage() {
   const session = useSession()
@@ -11,6 +12,15 @@ export default function HomePage() {
           <div>
             <div>Session</div>
             <div>{JSON.stringify(session)}</div>
+            <Button
+              onClick={() => {
+                console.log('Logging out ...')
+                signOut()
+              }}
+              type="button"
+            >
+              Logout
+            </Button>
           </div>
         ) : (
           <div>Not signed in</div>
