@@ -44,7 +44,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      authorization: {
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code'
+        }
+      }
     }),
     Credentials({
       async authorize(credentials) {
@@ -89,10 +96,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token
     },
     session({ session, token }) {
-      console.log({
-        sessionToken: token,
-        session
-      })
+      // console.log({
+      //   sessionToken: token,
+      //   session
+      // })
 
       if (token.sub && session.user) {
         session.user.id = token.sub as string
@@ -110,17 +117,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/auth/login',
     error: '/auth/error'
   },
-  logger: {
-    error(code, ...message) {
-      log.error(code, ...message)
-    },
-    warn(code, ...message) {
-      log.warn(code, ...message)
-    },
-    debug(code, ...message) {
-      log.debug(code, ...message)
-    }
-  },
+  // logger: {
+  //   error(code, ...message) {
+  //     log.error(code, ...message)
+  //   },
+  //   warn(code, ...message) {
+  //     log.warn(code, ...message)
+  //   },
+  //   debug(code, ...message) {
+  //     log.debug(code, ...message)
+  //   }
+  // },
   // events
   events: {
     async linkAccount({ user }) {
@@ -130,6 +137,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           emailVerified: new Date()
         }
       }) // update user
+    },
+    // session(message) {
+    //   console.log('session EVENT', message)
+    // },
+    signIn(message) {
+      console.log('signIn EVENT', message)
+    },
+    signOut(message) {
+      console.log('signOut EVENT', message)
     }
   }
 })
