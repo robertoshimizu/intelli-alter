@@ -1,59 +1,102 @@
 'use client'
-import { newVerification } from '@/actions/new-verification'
 import { CardWrapper } from '@/components/auth/card-wrapper'
-import { useSearchParams } from 'next/navigation'
-import { Suspense, useCallback, useEffect, useState } from 'react'
-import { BeatLoader } from 'react-spinners'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { NewPasswordSchema } from '@/schemas'
+import * as z from 'zod'
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { FormError } from '@/components/form-error'
 import { FormSuccess } from '@/components/form-success'
+import { Suspense, useState, useTransition } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { newPassword } from '@/actions/new-password'
 
 export const NewPasswordForm = () => {
   function Search() {
+    const [isPending, startTransition] = useTransition()
+    const searchParams = useSearchParams()
+    const token = searchParams.get('token')
+
     const [error, setError] = useState<string | undefined>('')
     const [success, setSuccess] = useState<string | undefined>('')
-    const searchParams = useSearchParams()
-    const token = searchParams.get('token') ?? ''
 
-    const onSubmit = useCallback(() => {
-      if (success || error) return
+    const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
+      setError('')
+      setSuccess('')
 
-      if (!token) {
-        setError('Missing token!')
-        return
+      startTransition(() => {
+        newPassword(values, token ?? '').then((data) => {
+          setError(data?.error)
+          setSuccess(data?.success)
+        })
+      })
+    }
+    const form = useForm<z.infer<typeof NewPasswordSchema>>({
+      resolver: zodResolver(NewPasswordSchema),
+      defaultValues: {
+        password: ''
       }
-      newVerification(token)
-        .then((data) => {
-          setSuccess(data.success)
-          setError(data.error)
-        })
-        .catch((error) => {
-          setError(error)
-        })
-    }, [token, success, error])
-    useEffect(() => {
-      onSubmit()
-    }, [onSubmit])
-
+    })
     return (
-      <>
-        {!success && !error && <BeatLoader />}
-        <FormSuccess message={success} />
-        {!success && <FormError message={error} />}
-      </>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      id="password"
+                      type="password"
+                      className="input"
+                      placeholder="******"
+                    />
+                  </FormControl>
+                  <Button
+                    size="sm"
+                    variant="link"
+                    asChild
+                    className="px-0 font-light"
+                  ></Button>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormError message={error} />
+          <FormSuccess message={success} />
+          <Button disabled={isPending} type="submit" className="w-full">
+            Reset password
+          </Button>
+        </form>
+      </Form>
     )
   }
 
   return (
     <CardWrapper
-      headerLabel="Verifying email..."
-      backButtonHref="/auth/login"
+      headerLabel="Enter a new password"
       backButtonLabel="Back to login"
+      backButtonHref="/auth/login"
     >
-      <div className="w-full flex justify-center items-center">
-        <Suspense>
-          <Search />
-        </Suspense>
-      </div>
+      <Suspense>
+        <Search />
+      </Suspense>
     </CardWrapper>
   )
 }

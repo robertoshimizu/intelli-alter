@@ -9,6 +9,7 @@ export default async function Page() {
       <form
         action={async () => {
           'use server'
+          console.log('Logging out ...')
           await signOut()
         }}
       >
