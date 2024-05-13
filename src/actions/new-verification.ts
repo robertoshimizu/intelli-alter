@@ -23,13 +23,20 @@ export const newVerification = async (token: string) => {
     return { error: 'User not found!' }
   }
 
-  await db.user.update({
-    where: { id: existingToken.id },
-    data: {
-      emailVerified: new Date(),
-      email: existingToken.email
-    }
-  })
+  console.log('existingToken: ', existingToken)
+
+  try {
+    await db.user.update({
+      where: { email: existingToken.email },
+      data: {
+        emailVerified: new Date(),
+        email: existingToken.email
+      }
+    })
+  } catch (error) {
+    console.error('Error verifying email: ', error)
+    return { error: 'Error verifying email!' }
+  }
 
   await db.verificationToken.delete({
     where: { id: existingToken.id }
