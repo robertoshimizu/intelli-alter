@@ -50,6 +50,13 @@ export const LoginForm = () => {
     setSuccess('')
 
     startTransition(() => {
+      // signIn('credentials', {
+      //   email: values.email,
+      //   password: values.password
+      // }).then((data) => {
+      //   setError(data?.error)
+      //   setSuccess(data?.success)
+      // })
       login(values).then((data) => {
         setError(data?.error)
         setSuccess(data?.success)
