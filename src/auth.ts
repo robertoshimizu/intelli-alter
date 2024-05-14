@@ -43,8 +43,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       clientSecret: process.env.AUTH_GITHUB_SECRET
     }),
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      clientId: process.env.AUTH_GOOGLE_CLIENT_ID,
+      clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET,
       authorization: {
         params: {
           prompt: 'consent',
@@ -96,10 +96,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token
     },
     session({ session, token }) {
-      // console.log({
-      //   sessionToken: token,
-      //   session
-      // })
+      console.log({
+        sessionToken: token,
+        session
+      })
 
       if (token.sub && session.user) {
         session.user.id = token.sub as string
@@ -116,7 +116,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: '/auth/login',
     error: '/auth/error'
-  },
+  }
   // logger: {
   //   error(code, ...message) {
   //     log.error(code, ...message)
@@ -129,23 +129,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   //   }
   // },
   // events
-  events: {
-    async linkAccount({ user }) {
-      await db.user.update({
-        where: { id: user.id },
-        data: {
-          emailVerified: new Date()
-        }
-      }) // update user
-    },
-    // session(message) {
-    //   console.log('session EVENT', message)
-    // },
-    signIn(message) {
-      console.log('signIn EVENT', message)
-    },
-    signOut(message) {
-      console.log('signOut EVENT', message)
-    }
-  }
+  // events: {
+  //   async linkAccount({ user }) {
+  //     await db.user.update({
+  //       where: { id: user.id },
+  //       data: {
+  //         emailVerified: new Date()
+  //       }
+  //     }) // update user
+  //   },
+  //   session(message) {
+  //     console.log('session EVENT', message)
+  //   },
+  //   signIn(message) {
+  //     console.log('signIn EVENT', message)
+  //   },
+  //   signOut(message) {
+  //     console.log('signOut EVENT', message)
+  //   }
+  // }
 })
