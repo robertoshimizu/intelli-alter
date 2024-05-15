@@ -35,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   // @ts-ignore
   adapter: PrismaAdapter(db),
   session: { strategy: 'jwt' },
-  debug: true,
+  debug: false,
   trustHost: true,
   providers: [
     GitHub({
@@ -98,10 +98,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token
     },
     session({ session, token }) {
-      console.log({
-        sessionToken: token,
-        session
-      })
+      // console.log({
+      //   sessionToken: token,
+      //   session
+      // })
 
       if (token.sub && session.user) {
         session.user.id = token.sub as string

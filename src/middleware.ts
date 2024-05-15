@@ -11,8 +11,10 @@ import {
 export default auth((req) => {
   const { nextUrl } = req
   const isLoggedIn = !!req.auth
+  console.log('********** Middleware **********')
   console.log('ROUTE: ', req.nextUrl.pathname)
   console.log('isLoggedIn: ', isLoggedIn)
+  console.log('********************************')
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix)
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname)

@@ -1,5 +1,6 @@
 'use client'
 
+import { admin } from '@/actions/admin'
 import RoleGate from '@/components/auth/role-gate'
 import { FormSuccess } from '@/components/form-success'
 import { Button } from '@/components/ui/button'
@@ -20,6 +21,19 @@ export default function AdminPage() {
       console.error(error)
     }
   }
+
+  const onServerActionClick = async () => {
+    try {
+      const response = await admin()
+      if (response.success) {
+        toast.success(response.success)
+      } else {
+        toast.error(response.error)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
   return (
     <Card className="w-[600px]">
       <CardHeader>
@@ -35,7 +49,7 @@ export default function AdminPage() {
         </div>
         <div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-md">
           <p className="text-sm font-medium">Admin-only Server Action</p>
-          <Button>Click to test</Button>
+          <Button onClick={onServerActionClick}>Click to test</Button>
         </div>
       </CardContent>
     </Card>
