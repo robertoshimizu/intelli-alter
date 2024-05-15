@@ -14,8 +14,13 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import useCurrentUser from '@/hooks/use-current-user'
+import { FormError } from './form-error'
+import { FormSuccess } from './form-success'
 
 export const FormSettings = () => {
+  const user = useCurrentUser()
+
   const { update } = useSession()
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | undefined>()
@@ -24,11 +29,12 @@ export const FormSettings = () => {
   const form = useForm<z.infer<typeof SettingsSchema>>({
     resolver: zodResolver(SettingsSchema),
     defaultValues: {
-      name: ''
+      name: user?.name || undefined
     }
   })
 
   const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
+    console.log('values', values)
     startTransition(() => {
       settings(values)
         .then((data: any) => {
@@ -45,9 +51,9 @@ export const FormSettings = () => {
   }
 
   return (
-    <div className="space-y-4">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+    <Form {...form}>
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <div>
           <FormField
             control={form.control}
             name="name"
@@ -65,9 +71,13 @@ export const FormSettings = () => {
               </FormItem>
             )}
           />
-        </form>
-      </Form>
-      <Button type="submit">Save</Button>
-    </div>
+        </div>
+        <FormError message={error} />
+        <FormSuccess message={success} />
+        <Button disabled={isPending} type="submit">
+          Save
+        </Button>
+      </form>
+    </Form>
   )
 }
