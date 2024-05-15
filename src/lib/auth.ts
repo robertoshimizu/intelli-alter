@@ -10,3 +10,12 @@ export const currentUser = async () => {
   const session = await auth()
   return session?.user
 }
+
+/**
+ * Get the current user role using server side.
+ * @returns {Promise} The current user' role.
+ */
+export const currentRole = async () => {
+  const session = await auth()
+  return session?.user.role
+}
