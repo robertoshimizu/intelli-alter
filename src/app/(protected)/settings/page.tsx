@@ -12,7 +12,7 @@ export default function SettingsPage() {
   const [isPending, startTransition] = useTransition()
   const onClick = () => {
     startTransition(() => {
-      settings({ name: 'New Name!' }).then(() => {
+      settings({ name: 'Roberto Shimizu' }).then(() => {
         update()
       })
     })

@@ -9,6 +9,7 @@ import bcrypt from 'bcryptjs'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { db } from '@/lib/db'
 import { UserRole } from '@prisma/client'
+import { getAccountByUserId } from './data/account'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   // @ts-ignore
@@ -71,6 +72,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (!existingUser) return token
 
+      const existingAccount = await getAccountByUserId(existingUser.id)
+
+      token.isOAuth = existingAccount?.provider ? true : false
       token.name = existingUser.name
       token.email = existingUser.email
       token.role = existingUser.role
@@ -96,6 +100,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.name = token.name as string
         session.user.email = token.email as string
+        session.user.isOAuth = token.isOAuth as boolean
       }
 
       return session
@@ -115,9 +120,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       }) // update user
     },
-    session(message) {
-      console.log('session EVENT', message)
-    },
+    // session(message) {
+    //   console.log('session EVENT', message)
+    // },
     signIn(message) {
       console.log('signIn EVENT', message)
     },
