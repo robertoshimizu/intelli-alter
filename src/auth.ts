@@ -1,5 +1,5 @@
 import log from '@/lib/logging-service'
-import NextAuth, { type DefaultSession } from 'next-auth'
+import NextAuth, { Session, User } from 'next-auth'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
@@ -8,28 +8,7 @@ import { getUserByEmail, getUserById } from './data/user'
 import bcrypt from 'bcryptjs'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { db } from '@/lib/db'
-
-declare module 'next-auth' {
-  /**
-   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-   */
-  interface Session {
-    user: {
-      /** The user's postal address. */
-      address?: string
-      /** customField */
-      customField?: string
-      /** UserRole user or admin */
-      role?: string
-      /**
-       * By default, TypeScript merges new interface properties and overwrites existing ones.
-       * In this case, the default session user properties will be overwritten,
-       * with the new ones defined above. To keep the default session user properties,
-       * you need to add them back into the newly declared interface.
-       */
-    } & DefaultSession['user']
-  }
-}
+import { UserRole } from '@prisma/client'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   // @ts-ignore
@@ -92,6 +71,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (!existingUser) return token
 
+      token.name = existingUser.name
+      token.email = existingUser.email
       token.role = existingUser.role
       token.customField = 'customField value'
 
@@ -109,7 +90,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       if (token.role && session.user) {
-        session.user.role = token.role as string
+        session.user.role = token.role as UserRole
+      }
+
+      if (session.user) {
+        session.user.name = token.name as string
+        session.user.email = token.email as string
       }
 
       return session
@@ -118,6 +104,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     signIn: '/auth/login',
     error: '/auth/error'
+  },
+  // events
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: { id: user.id },
+        data: {
+          emailVerified: new Date()
+        }
+      }) // update user
+    },
+    session(message) {
+      console.log('session EVENT', message)
+    },
+    signIn(message) {
+      console.log('signIn EVENT', message)
+    },
+    signOut(message) {
+      console.log('signOut EVENT', message)
+    }
   }
   // logger: {
   //   error(code, ...message) {
@@ -130,24 +136,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   //     log.debug(code, ...message)
   //   }
   // },
-  // events
-  // events: {
-  //   async linkAccount({ user }) {
-  //     await db.user.update({
-  //       where: { id: user.id },
-  //       data: {
-  //         emailVerified: new Date()
-  //       }
-  //     }) // update user
-  //   },
-  //   session(message) {
-  //     console.log('session EVENT', message)
-  //   },
-  //   signIn(message) {
-  //     console.log('signIn EVENT', message)
-  //   },
-  //   signOut(message) {
-  //     console.log('signOut EVENT', message)
-  //   }
-  // }
 })

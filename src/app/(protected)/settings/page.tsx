@@ -3,13 +3,18 @@
 import { settings } from '@/actions/settings'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { useSession } from 'next-auth/react'
 import { useTransition } from 'react'
 
 export default function SettingsPage() {
+  // Need to update the session to changes take place
+  const { update } = useSession()
   const [isPending, startTransition] = useTransition()
   const onClick = () => {
     startTransition(() => {
-      settings({ name: 'New Name!' })
+      settings({ name: 'New Name!' }).then(() => {
+        update()
+      })
     })
   }
   return (
