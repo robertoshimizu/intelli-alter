@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       break
     case 'gemini':
       const google = createGoogleGenerativeAI()
-      model = google('models/gemini-pro')
+      model = google('models/gemini-1.5-pro-latest')
       break
 
     default:
