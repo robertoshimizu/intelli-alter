@@ -1,10 +1,17 @@
-import { auth } from '@/auth'
+'use client'
 
-export default async function Page() {
-  const session = await auth()
+import { FormSettings } from '@/components/form-settings'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+
+export default function SettingsPage() {
   return (
-    <div className="flex flex-col gap-y-4 max-w-2xl py-24 mx-auto">
-      <div>{JSON.stringify(session)}</div>
-    </div>
+    <Card className="w-[600px]">
+      <CardHeader>
+        <p className="text-2xl font-semibold text-center">⚙️ Settings</p>
+      </CardHeader>
+      <CardContent>
+        <FormSettings />
+      </CardContent>
+    </Card>
   )
 }
