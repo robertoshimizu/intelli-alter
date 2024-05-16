@@ -3,31 +3,18 @@
  * These routes do not require authentication.
  * @type {string[]}
  */
-export const publicRoutes = ['/', '/auth/new-verification']
+export const publicRoutes = ['/']
 
 /**
  * An array of routes that are accessible by authenticated users.
  * @type {string[]}
  *
  */
-export const authRoutes = [
-  '/auth/login',
-  '/auth/register',
-  '/auth/error',
-  '/auth/reset-password',
-  '/auth/new-password'
-]
-
-/**
- * The prefix for API authentication routes.
- * @type {string}
- *
- */
-export const apiAuthPrefix = '/api/auth'
+export const authRoutes = ['/sign-in', '/sign-up']
 
 /**
  * The default redirect path after logging in.
  * @type {string}
  *
  */
-export const DEFAULT_LOGIN_REDIRECT = '/settings'
+export const DEFAULT_LOGIN_REDIRECT = '/chat'
