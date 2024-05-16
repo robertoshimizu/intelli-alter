@@ -7,6 +7,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import { IconSeparator } from '@/components/ui/icons'
 import { SideMenu } from '@/components/header-side-menu'
+import { UserMenu } from '@/components/user-menu'
 
 export function Header() {
   return (
@@ -21,7 +22,7 @@ export function Header() {
           <SideMenu />
           <IconSeparator className="size-6 text-muted-foreground/50" />
           {/* Mount the UserButton component */}
-          UserMenu
+          <UserMenu />
         </SignedIn>
       </div>
       <div className="flex items-center justify-end space-x-2">
