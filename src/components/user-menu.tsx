@@ -1,5 +1,5 @@
 'use client'
-import { useUser, useClerk } from '@clerk/nextjs'
+import { useUser, useClerk, UserButton, UserProfile } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -40,6 +40,10 @@ export function UserMenu() {
         <DropdownMenuContent sideOffset={8} align="start" className="w-fit">
           <DropdownMenuItem className="flex-col items-start">
             <div className="text-xs text-zinc-500">{email}</div>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="flex-col items-start">
+            <UserProfile path="/user-profile" />
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <form
