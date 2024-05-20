@@ -4,7 +4,7 @@ export default async function ApiDocPage() {
   const spec = await getApiDocs()
   return (
     <section className="container">
-      <ReactSwagger spec={spec} />
+      <ReactSwagger spec={spec} url="/swagger.json" />
     </section>
   )
 }
