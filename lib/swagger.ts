@@ -5,7 +5,7 @@ import 'server-only'
 export const getApiDocs = async () => {
   const spec = createSwaggerSpec({
     apiFolder: 'src/app/api',
-
+    url: 'https://www.consiliis.tech',
     definition: {
       openapi: '3.0.0',
       info: {
