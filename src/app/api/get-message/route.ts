@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 /**
  * @swagger
  *  paths:
- *    /api/get-users:
+ *    /api/get-message:
  *      get:
- *        description: Returns the hello world message
+ *        description: Returns an answer to a query to intellidoctor
  *        parameters:
  *          - name: query
  *            in: query
@@ -12,7 +12,7 @@ import { NextRequest, NextResponse } from 'next/server'
  *            type: string
  *        responses:
  *          200:
- *            description: Hello, world!
+ *            description: Success
  *          400:
  *            description: Bad request
  *          500:

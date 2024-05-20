@@ -9,8 +9,8 @@ export const getApiDocs = async () => {
     definition: {
       openapi: '3.0.0',
       info: {
-        title: 'Next Swagger API Example',
-        description: 'API documentation for Next.js API routes',
+        title: 'API IntelliDoctor.ai',
+        description: 'Documentação dos endpoints da API IntelliDoctor.ai',
         version: '1.0.0'
       }
     },

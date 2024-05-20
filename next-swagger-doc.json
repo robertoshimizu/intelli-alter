@@ -4,8 +4,9 @@
   "definition": {
     "openapi": "3.0.0",
     "info": {
-      "title": "Next Swagger API Example",
-      "version": "1.0"
+      "title": "API IntelliDoctor.ai",
+      "description": "Documentação dos endpoints da API IntelliDoctor.ai",
+      "version": "1.0.0"
     }
   }
 }
