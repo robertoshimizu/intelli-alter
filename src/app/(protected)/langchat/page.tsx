@@ -1,6 +1,6 @@
 'use client'
 
-import { useCompletion } from 'ai/react'
+import { useChat } from 'ai/react'
 import { useState } from 'react'
 
 type Message = {
@@ -12,15 +12,16 @@ type Message = {
 export default function ChatPage() {
   const [model, setModel] = useState('gemini') // Default model
 
-  const { completion, input, handleInputChange, handleSubmit, data } =
-    useCompletion({
-      api: '/api/langchat',
-      body: {
-        data: {
-          model: model
-        }
+  const { messages, input, handleInputChange, handleSubmit, data } = useChat({
+    api: '/api/langchat',
+    body: {
+      data: {
+        model: model
       }
-    })
+    },
+    sendExtraMessageFields: true,
+    streamMode: 'stream-data'
+  })
 
   const handleModelChange = (event: any) => {
     setModel(event.target.value)
@@ -43,7 +44,12 @@ export default function ChatPage() {
         </select>
       </div>
 
-      {completion}
+      {messages.map((m) => (
+        <div key={m.id} className="whitespace-pre-wrap">
+          {m.role === 'user' ? 'User: ' : 'AI: '}
+          {m.content}
+        </div>
+      ))}
 
       <form onSubmit={handleSubmit}>
         <input
