@@ -13,7 +13,7 @@ type Message = {
 export default function ChatPage() {
   const [model, setModel] = useState('gemini') // Default model
   const { messages, input, handleInputChange, handleSubmit, data } = useChat({
-    api: '/api/chat',
+    api: '/api/langchat',
     body: {
       data: {
         model: model
@@ -29,7 +29,7 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col w-full max-w-md py-14 mx-auto stretch">
-      <h1 className="my-4 text-2xl font-semibold">Chat with Vercel AI</h1>
+      <h1 className="my-4 text-2xl font-semibold">Langchat</h1>
       {/* Model selection dropdown */}
       <div className="mb-4">
         <select
