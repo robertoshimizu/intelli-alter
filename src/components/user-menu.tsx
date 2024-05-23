@@ -45,6 +45,12 @@ export function UserMenu() {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="flex-col items-start" asChild>
+            <Link id="langgraph" href="/langgraph">
+              Langgraph
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="flex-col items-start" asChild>
             <Link id="rsc_chat" href="/rsc_chat">
               Chat using RSC
             </Link>
