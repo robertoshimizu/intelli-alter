@@ -1,8 +1,7 @@
 'use client'
-import Image from 'next/image'
-import { useChat } from 'ai/react'
+
+import { useCompletion } from 'ai/react'
 import { useState } from 'react'
-import { TitleLogoLight } from '@/components/ui/logos'
 
 type Message = {
   id: number
@@ -12,16 +11,16 @@ type Message = {
 
 export default function ChatPage() {
   const [model, setModel] = useState('gemini') // Default model
-  const { messages, input, handleInputChange, handleSubmit, data } = useChat({
-    api: '/api/langchat',
-    body: {
-      data: {
-        model: model
+
+  const { completion, input, handleInputChange, handleSubmit, data } =
+    useCompletion({
+      api: '/api/langchat',
+      body: {
+        data: {
+          model: model
+        }
       }
-    },
-    sendExtraMessageFields: true,
-    streamMode: 'stream-data'
-  })
+    })
 
   const handleModelChange = (event: any) => {
     setModel(event.target.value)
@@ -44,12 +43,7 @@ export default function ChatPage() {
         </select>
       </div>
 
-      {messages.map((m) => (
-        <div key={m.id} className="whitespace-pre-wrap">
-          {m.role === 'user' ? 'User: ' : 'AI: '}
-          {m.content}
-        </div>
-      ))}
+      {completion}
 
       <form onSubmit={handleSubmit}>
         <input

@@ -1,37 +1,31 @@
-import { StreamingTextResponse, streamText, StreamData } from 'ai'
+import { LangChainAdapter, StreamingTextResponse } from 'ai'
 
-import { llm_model } from '@/lib/models/llm'
+import { chatModel } from '@/lib/models/langchain_llms'
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge'
 
+export interface Message {
+  role: 'user' | 'assistant'
+  content: string
+}
+
 export async function POST(req: Request) {
-  const request = await req.json() // Assuming modelType is provided in the request
-  //console.log(request)
+  const { prompt } = await req.json() // Assuming modelType is provided in the request
 
-  const { messages, data } = request
+  const { messages, data } = prompt
 
-  const model = llm_model(data.model)
+  const modelType = 'mixtral-8x7B'
 
-  const result = await streamText({
-    model,
-    temperature: 0.0,
-    system:
-      'You are a helpful assistant that can answer questions and provide information. You must always answer in language of the user and provide accurate information.',
-    messages
+  const model = chatModel(modelType).withConfig({
+    runName: 'langchain-llms'
   })
 
-  // data = new StreamData()
+  const stream = await model.stream(prompt)
 
-  // data.append({ test: 'value' })
+  const aiStream = LangChainAdapter.toAIStream(stream)
 
-  // const stream = result.toAIStream({
-  //   onFinal(_) {
-  //     data.close()
-  //   }
-  // })
-  const stream = result.toAIStream()
+  //return new StreamingTextResponse(aiStream, {}, data)
 
-  // return new StreamingTextResponse(stream, {}, data)
-  return new StreamingTextResponse(stream, {})
+  return new StreamingTextResponse(aiStream)
 }
