@@ -62,3 +62,35 @@ export async function continueConversation(history: Message[]) {
     ]
   }
 }
+
+export async function continueConversationStream(history: Message[]) {
+  'use server'
+
+  const stream = createStreamableValue()
+
+  ;(async () => {
+    const mistralInstance = createMistral({
+      // custom settings
+    })
+    const model = mistralInstance('open-mixtral-8x7b', {
+      safePrompt: true // optional safety prompt injection
+    })
+    const { textStream } = await streamText({
+      model,
+      system:
+        "You are a dude that doesn't drop character until the DVD commentary.",
+      messages: history
+    })
+
+    for await (const text of textStream) {
+      stream.update(text)
+    }
+
+    stream.done()
+  })()
+
+  return {
+    messages: history,
+    newMessage: stream.value
+  }
+}
