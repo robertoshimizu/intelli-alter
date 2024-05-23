@@ -1,19 +1,32 @@
 'use server'
 
-import { generateText } from 'ai'
+import { streamText } from 'ai'
 import { createMistral } from '@ai-sdk/mistral'
+import { createStreamableValue } from 'ai/rsc'
 
-export async function getAnswer(question: string) {
-  const mistralInstance = createMistral({
-    // custom settings
-  })
-  const model = mistralInstance('open-mixtral-8x7b', {
-    safePrompt: true // optional safety prompt injection
-  })
-  const { text, finishReason, usage } = await generateText({
-    model,
-    prompt: question
-  })
+export async function generate(input: string) {
+  'use server'
 
-  return { text, finishReason, usage }
+  const stream = createStreamableValue('')
+
+  ;(async () => {
+    const mistralInstance = createMistral({
+      // custom settings
+    })
+    const model = mistralInstance('open-mixtral-8x7b', {
+      safePrompt: true // optional safety prompt injection
+    })
+    const { textStream } = await streamText({
+      model,
+      prompt: input
+    })
+
+    for await (const delta of textStream) {
+      stream.update(delta)
+    }
+
+    stream.done()
+  })()
+
+  return { output: stream.value }
 }
