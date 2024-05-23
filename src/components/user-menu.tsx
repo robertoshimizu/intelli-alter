@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { RxHamburgerMenu } from 'react-icons/rx'
+import Link from 'next/link'
 
 function getEmail(user: any) {
   const email = user.emailAddresses[0].emailAddress
@@ -31,16 +32,28 @@ export function UserMenu() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent sideOffset={8} align="start" className="w-fit">
-          <DropdownMenuItem className="flex-col items-start">
-            new chat
+          <DropdownMenuItem className="flex-col items-start" asChild>
+            <Link id="chat" href="/chat">
+              Chat using Vercel
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="flex-col items-start">
-            mediscribe
+          <DropdownMenuItem className="flex-col items-start" asChild>
+            <Link id="langchat" href="/langchat">
+              Langchat
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="flex-col items-start">
-            tools
+          <DropdownMenuItem className="flex-col items-start" asChild>
+            <Link id="rsc_chat" href="/rsc_chat">
+              Chat using RSC
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="flex-col items-start" asChild>
+            <Link id="tools" href="/rsc">
+              Tools
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

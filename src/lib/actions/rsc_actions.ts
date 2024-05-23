@@ -1,6 +1,6 @@
 'use server'
 
-import { streamText } from 'ai'
+import { streamText, generateText } from 'ai'
 import { createMistral } from '@ai-sdk/mistral'
 import { createStreamableValue } from 'ai/rsc'
 
@@ -29,4 +29,36 @@ export async function generate(input: string) {
   })()
 
   return { output: stream.value }
+}
+
+export interface Message {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+export async function continueConversation(history: Message[]) {
+  'use server'
+
+  const mistralInstance = createMistral({
+    // custom settings
+  })
+  const model = mistralInstance('open-mixtral-8x7b', {
+    safePrompt: true // optional safety prompt injection
+  })
+
+  const { text } = await generateText({
+    model,
+    system: 'You are a friendly assistant!',
+    messages: history
+  })
+
+  return {
+    messages: [
+      ...history,
+      {
+        role: 'assistant' as const,
+        content: text
+      }
+    ]
+  }
 }

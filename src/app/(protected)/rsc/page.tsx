@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col w-full max-w-md py-14 mx-auto stretch">
-      <h1 className="my-4 text-2xl font-semibold">Chat with RSC</h1>
+      <h1 className="my-4 text-2xl font-semibold">Tools using RSC Streaming</h1>
       <button
         onClick={async () => {
           const { output } = await generate('Why is the sky blue?')
