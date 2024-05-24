@@ -2,6 +2,8 @@ import { LangChainAdapter, StreamingTextResponse } from 'ai'
 
 import { chatModel } from '@/lib/models/langchain_llms'
 import { transformMessages } from '@/lib/models/adapters'
+import { agentJack } from '@/lib/models/state-graph'
+import { HumanMessage } from '@langchain/core/messages'
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge'
@@ -18,15 +20,20 @@ export async function POST(req: Request) {
 
   console.log(messages)
 
-  const modelType = 'mixtral-8x7B'
-
-  const model = chatModel(modelType).withConfig({
-    runName: 'langchain-llms'
-  })
+  const app = await agentJack()
 
   const messagese = transformMessages(messages)
 
-  const stream = await model.stream(messagese)
+  const inputs = {
+    messages: [new HumanMessage('what is the weather in la')]
+  }
+
+  for await (const output of await app.stream(inputs)) {
+    console.log('output', output)
+    console.log('-----\n')
+  }
+
+  const stream = await app.stream(inputs)
 
   const aiStream = LangChainAdapter.toAIStream(stream, {
     onStart: () => {
