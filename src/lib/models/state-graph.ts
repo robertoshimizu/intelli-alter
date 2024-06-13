@@ -12,7 +12,8 @@ import { convertToOpenAIFunction } from '@langchain/core/utils/function_calling'
 import { TavilySearchResults } from '@langchain/community/tools/tavily_search'
 import { StructuredTool } from '@langchain/core/tools'
 
-export async function agentJack() {
+export async function stateGraph() {
+  console.log('stateGraph...')
   // set up the tools
   const tools = [
     new TavilySearchResults({ maxResults: 1 })
@@ -186,7 +187,7 @@ export async function agentJack() {
 async function main() {
   // Now we can call the app with some inputs
 
-  const app = await agentJack()
+  const app = await stateGraph()
 
   const inputs = {
     messages: [new HumanMessage('what is the weather in sf')]

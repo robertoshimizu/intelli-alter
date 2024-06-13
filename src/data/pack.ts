@@ -1,3 +1,9 @@
+/**
+ * This interface is the structure of the PACK medical procedures.
+ * @param {string} titulo - The title of the procedure.
+ * @param {number} pagina - The page number of the procedure.
+ * @param {string} conteudo - The content of the procedure.
+ */
 export interface Pack {
   titulo: string
   pagina: number
