@@ -55,7 +55,6 @@ function customParser(): AIStreamParser {
         }
         // @ts-ignore
         const msg = chunk.message.kwargs as any
-        console.log('/n********************** GORO *******************')
 
         if (msg.tool_call_chunks && msg.tool_call_chunks.length > 0) {
           console.log('******************* TOOLs **********************')
@@ -63,7 +62,7 @@ function customParser(): AIStreamParser {
         } else {
           const messageContent = msg.content
           console.log('******************* KATZO **********************')
-          console.log('Message content:', messageContent)
+          // console.log('Message content:', messageContent)
           return { isText: false, content: messageContent }
         }
         return
@@ -87,13 +86,14 @@ function customParser(): AIStreamParser {
 function FetchStream(
   stream: IterableReadableStream<StreamEvent>,
   cb?: AIStreamCallbacksAndOptions
-): ReadableStream<string> {
+): ReadableStream<Uint8Array> {
+  // Change the stream type to Uint8Array for better handling of binary data
   const parser = customParser()
 
-  return new ReadableStream<string>({
+  return new ReadableStream<Uint8Array>({
     async start(controller) {
-      cb?.onStart?.()
-      console.log('Mandou para o callback o start')
+      await cb?.onStart?.()
+      console.log('Stream started')
 
       let final = ''
 
@@ -102,20 +102,37 @@ function FetchStream(
         if (parsed && typeof parsed !== 'string' && !parsed.isText) {
           const output = parsed.content
           console.log('Enqueuing:', output)
-          controller.enqueue(output)
-          cb?.onCompletion?.(output)
-          cb?.onToken?.(output)
+          const encoder = new TextEncoder()
+          const encodedOutput = encoder.encode(output)
+          controller.enqueue(encodedOutput)
+          await cb?.onCompletion?.(output)
+          await cb?.onToken?.(output)
           final = output
         }
       }
 
       controller.close()
-      cb?.onFinal?.(final)
+      await cb?.onFinal?.(final)
     },
     cancel() {
       cb?.onFinal?.('final')
     }
   })
+}
+
+// Assuming you have a function to consume the streaming response in the UI
+async function consumeStream(response: StreamingTextResponse) {
+  const reader = response.body?.getReader()
+  const decoder = new TextDecoder()
+  while (true) {
+    const { value, done } = (await reader?.read()) || {}
+    if (done) break
+    if (value) {
+      const chunk = decoder.decode(value)
+      console.log('Chunk from stream:', chunk)
+      // Here you can update the UI with the received chunk
+    }
+  }
 }
 
 async function simpleStreamExample() {
@@ -133,24 +150,24 @@ async function simpleStreamExample() {
   return stream
 }
 
-async function consumeStream(stream: ReadableStream<any>) {
-  if (!stream || typeof stream.getReader !== 'function') {
-    console.error('Provided stream is not a ReadableStream:', stream)
-    return
-  }
+// async function consumeStream(stream: ReadableStream<any>) {
+//   if (!stream || typeof stream.getReader !== 'function') {
+//     console.error('Provided stream is not a ReadableStream:', stream)
+//     return
+//   }
 
-  const reader = stream.getReader()
-  const decoder = new TextDecoder()
+//   const reader = stream.getReader()
+//   const decoder = new TextDecoder()
 
-  while (true) {
-    const { done, value } = await reader?.read()
-    if (done) {
-      console.log('Stream reading done.')
-      break
-    }
-    console.log('Received chunk:', decoder.decode(value))
-  }
-}
+//   while (true) {
+//     const { done, value } = await reader?.read()
+//     if (done) {
+//       console.log('Stream reading done.')
+//       break
+//     }
+//     console.log('Received chunk:', decoder.decode(value))
+//   }
+// }
 
 async function testStreamingTextResponse() {
   try {
@@ -243,9 +260,9 @@ export async function POST(req: Request) {
       }
     })
 
-    const reader = aiStream.getReader()
+    //const reader = aiStream.getReader()
 
-    readStream(reader)
+    //readStream(reader)
 
     //testStreamingTextResponse()
 
@@ -253,8 +270,8 @@ export async function POST(req: Request) {
 
     //console.log('AI Stream:', aiStream)
     //await consumeStream(aiStream) // Consume the stream and log the output
-    return new Response('Oba', { status: 200 })
-    //return new StreamingTextResponse(aiStream, {})
+    //return new Response('Oba', { status: 200 })
+    return new StreamingTextResponse(aiStream, {})
   } catch (error) {
     console.error('Error Streaming:', error)
     return new Response('Error', { status: 501 })
