@@ -20,38 +20,135 @@ type AIStreamChunk = {
   example: boolean
 }
 
-function customParser(): (
-  event: any
-) => { completion: string; token: string } | void {
-  // @ts-ignore
+function customParser() {
   return (event: any) => {
-    try {
-      if (event.event === 'on_llm_stream') {
-        let chunk: ChatGenerationChunk = event.data?.chunk
-        let msg = chunk.message as AIMessageChunk
+    switch (event.event) {
+      case 'on_llm_start':
+        console.log('*****************************************')
+        console.log('On LLM Start')
+        //console.log('Chunk:', event)
+        return { completion: '', token: 'tok' }
+
+      case 'on_llm_stream':
+        const chunk: ChatGenerationChunk = event.data?.chunk
+        const msg = chunk.message as AIMessageChunk
+        //console.log('Chunk received:', chunk)
+
         if (msg.tool_call_chunks && msg.tool_call_chunks.length > 0) {
-          // define what to do with tool call chunks
-          console.log(msg.tool_call_chunks)
+          // Handle tool call chunks if needed
+          console.log('*****************************************')
+          console.log('Tool call chunks:', msg.tool_call_chunks)
         } else {
-          //console.log(msg.content)
+          // Return the content
           const messageContent = msg.content
-          // Return the relevant data for the callbacks
-          return messageContent
+          console.log('*****************************************')
+          console.log('Message content:', messageContent)
+          return { completion: messageContent, token: '' }
         }
-      }
-    } catch (error) {
-      console.error('Error parsing chunk:', error)
-      // Handle parsing error or invalid chunk format
+      default:
+        //console.log('*****************************************')
+        //console.error('Event:', event.event)
+        return null
     }
   }
 }
 
 function FetchStream(
-  res: IterableReadableStream<StreamEvent>,
+  stream: IterableReadableStream<StreamEvent>,
   cb?: AIStreamCallbacksAndOptions
 ): ReadableStream {
-  //@ts-ignore
-  return AIStream(res, customParser(), cb)
+  const parser = customParser()
+
+  return new ReadableStream<string>({
+    async start(controller) {
+      cb?.onStart?.()
+      console.log('Mandou para o callback o start')
+
+      for await (const event of stream) {
+        const parsed = parser(event)
+        const encoder = new TextEncoder() // Create a TextEncoder
+
+        if (parsed) {
+          // Convert the parsed object to a string
+
+          const output = parsed.completion.toString()
+          console.log('Enqueuing:', output)
+          const encodedOutput = encoder.encode(output) // Encode the output to ArrayBuffer
+          controller.enqueue(encodedOutput.toString()) // Enqueue the encoded data
+
+          cb?.onCompletion?.(parsed.completion.toString())
+          cb?.onToken?.(parsed.token)
+        }
+      }
+
+      controller.close()
+      cb?.onFinal?.('final')
+    },
+    cancel() {
+      cb?.onFinal?.('final')
+    }
+  })
+}
+
+async function simpleStreamExample() {
+  const stream = new ReadableStream({
+    start(controller) {
+      const chunks = ['Hello, ', 'world!', 'This is a test.']
+      for (const chunk of chunks) {
+        console.log('Enqueuing:', chunk)
+        controller.enqueue(chunk)
+      }
+      controller.close()
+    }
+  })
+
+  return stream
+}
+
+async function consumeStream(stream: ReadableStream<any>) {
+  if (!stream || typeof stream.getReader !== 'function') {
+    console.error('Provided stream is not a ReadableStream:', stream)
+    return
+  }
+
+  const reader = stream.getReader()
+  const decoder = new TextDecoder()
+
+  while (true) {
+    const { done, value } = await reader?.read()
+    if (done) {
+      console.log('Stream reading done.')
+      break
+    }
+    console.log('Received chunk:', decoder.decode(value))
+  }
+}
+
+async function testStreamingTextResponse() {
+  try {
+    const stream = await simpleStreamExample()
+    console.log('Testing StreamingTextResponse:')
+
+    // Create an instance of StreamingTextResponse with the stream
+    const response = new StreamingTextResponse(stream, {})
+
+    console.log('StreamingTextResponse created successfully:')
+    // Read from the response body stream
+    const reader = response.body?.getReader()
+    const decoder = new TextDecoder()
+
+    while (true) {
+      // @ts-ignore
+      const { done, value } = await reader.read()
+      if (done) {
+        console.log('Stream reading done.')
+        break
+      }
+      console.log('Received chunk:', decoder.decode(value))
+    }
+  } catch (error) {
+    console.error('Error creating StreamingTextResponse:', error)
+  }
 }
 
 export interface Message {
@@ -102,21 +199,32 @@ export async function POST(req: Request) {
   //   console.log('-----\n')
   // }
 
-  console.log('stream to screen')
-  // @ts-ignore
-  const aiStream = FetchStream(graph, {
-    onStart: () => {
-      console.log('Starting...')
-    },
-    onCompletion: () => {
-      console.log('Completed!')
-    },
-    onFinal: () => {
-      console.log('Final!')
-    }
-  })
+  try {
+    const aiStream = FetchStream(graph, {
+      onStart: async () => {
+        console.log('Stream Initializad...')
+      },
+      onCompletion: async (completion) => {
+        console.log('Completion going:', completion)
+      },
+      onFinal: async (completion) => {
+        console.log('Stream completed', completion)
+      },
+      onToken: async (token) => {
+        console.log('Token received', token)
+      }
+    })
 
-  //return new StreamingTextResponse(aiStream, {}, data)
+    //testStreamingTextResponse()
 
-  return new StreamingTextResponse(aiStream)
+    //const aiStream = await simpleStreamExample()
+
+    //console.log('AI Stream:', aiStream)
+    //await consumeStream(aiStream) // Consume the stream and log the output
+    //return new Response('Oba', { status: 200 })
+    return new StreamingTextResponse(aiStream, {})
+  } catch (error) {
+    console.error('Error Streaming:', error)
+    return new Response('Error', { status: 501 })
+  }
 }
