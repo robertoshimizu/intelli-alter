@@ -1,7 +1,7 @@
 'use client'
 
-import { useChat } from 'ai/react'
 import { useState } from 'react'
+import { useChat } from '@ai-sdk/react'
 
 type Message = {
   id: number
