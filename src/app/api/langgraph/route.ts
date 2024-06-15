@@ -1,6 +1,8 @@
 import {
   AIStream,
   AIStreamCallbacksAndOptions,
+  AIStreamParser,
+  AIStreamParserOptions,
   LangChainAdapter,
   StreamingTextResponse
 } from 'ai'
@@ -20,35 +22,64 @@ type AIStreamChunk = {
   example: boolean
 }
 
-function customParser() {
-  return (event: any) => {
+async function readStream(reader: ReadableStreamDefaultReader<string>) {
+  let result = await reader.read()
+  while (!result.done) {
+    console.log('Read:', result.value)
+    result = await reader.read()
+  }
+}
+
+function customParser(): AIStreamParser {
+  return (data: string, options: AIStreamParserOptions) => {
+    let event: StreamEvent
+    try {
+      event = JSON.parse(data)
+    } catch (error) {
+      console.error('Error parsing data:', error)
+      return
+    }
+
     switch (event.event) {
       case 'on_llm_start':
         console.log('*****************************************')
         console.log('On LLM Start')
-        //console.log('Chunk:', event)
-        return { completion: '', token: 'tok' }
+        return { isText: false, content: '' }
 
       case 'on_llm_stream':
+        console.log('on_llm_stream event:')
         const chunk: ChatGenerationChunk = event.data?.chunk
-        const msg = chunk.message as AIMessageChunk
-        //console.log('Chunk received:', chunk)
+        if (!chunk) {
+          console.error('Chunk is undefined or null:', event.data)
+          return
+        }
+        // @ts-ignore
+        const msg = chunk.message.kwargs as any
+        console.log('/n********************** GORO *******************')
 
         if (msg.tool_call_chunks && msg.tool_call_chunks.length > 0) {
-          // Handle tool call chunks if needed
-          console.log('*****************************************')
+          console.log('******************* TOOLs **********************')
           console.log('Tool call chunks:', msg.tool_call_chunks)
         } else {
-          // Return the content
           const messageContent = msg.content
-          console.log('*****************************************')
+          console.log('******************* KATZO **********************')
           console.log('Message content:', messageContent)
-          return { completion: messageContent, token: '' }
+          return { isText: false, content: messageContent }
         }
+        return
+
+      case 'on_llm_end':
+        console.log('*****************************************')
+        console.log('On LLM End', event.data.output.generations[0][0].text)
+        return {
+          isText: false,
+          content: event.data.output.generations[0][0].text
+        }
+
       default:
-        //console.log('*****************************************')
-        //console.error('Event:', event.event)
-        return null
+        console.log('*****************************************')
+        console.error('Event:', event.event)
+        return
     }
   }
 }
@@ -56,7 +87,7 @@ function customParser() {
 function FetchStream(
   stream: IterableReadableStream<StreamEvent>,
   cb?: AIStreamCallbacksAndOptions
-): ReadableStream {
+): ReadableStream<string> {
   const parser = customParser()
 
   return new ReadableStream<string>({
@@ -64,25 +95,22 @@ function FetchStream(
       cb?.onStart?.()
       console.log('Mandou para o callback o start')
 
+      let final = ''
+
       for await (const event of stream) {
-        const parsed = parser(event)
-        const encoder = new TextEncoder() // Create a TextEncoder
-
-        if (parsed) {
-          // Convert the parsed object to a string
-
-          const output = parsed.completion.toString()
+        const parsed = parser(JSON.stringify(event), { event: event.event })
+        if (parsed && typeof parsed !== 'string' && !parsed.isText) {
+          const output = parsed.content
           console.log('Enqueuing:', output)
-          const encodedOutput = encoder.encode(output) // Encode the output to ArrayBuffer
-          controller.enqueue(encodedOutput.toString()) // Enqueue the encoded data
-
-          cb?.onCompletion?.(parsed.completion.toString())
-          cb?.onToken?.(parsed.token)
+          controller.enqueue(output)
+          cb?.onCompletion?.(output)
+          cb?.onToken?.(output)
+          final = output
         }
       }
 
       controller.close()
-      cb?.onFinal?.('final')
+      cb?.onFinal?.(final)
     },
     cancel() {
       cb?.onFinal?.('final')
@@ -168,7 +196,7 @@ export async function POST(req: Request) {
   // const messagese = transformMessages(messages)
 
   const inputs = {
-    messages: [new HumanMessage('what is the weather in la')]
+    messages: [new HumanMessage('what is the weather in new york?')]
   }
 
   console.log('streaming')
@@ -208,12 +236,16 @@ export async function POST(req: Request) {
         console.log('Completion going:', completion)
       },
       onFinal: async (completion) => {
-        console.log('Stream completed', completion)
+        console.log('Stream COMPLTETED', completion)
       },
       onToken: async (token) => {
         console.log('Token received', token)
       }
     })
+
+    const reader = aiStream.getReader()
+
+    readStream(reader)
 
     //testStreamingTextResponse()
 
@@ -221,8 +253,8 @@ export async function POST(req: Request) {
 
     //console.log('AI Stream:', aiStream)
     //await consumeStream(aiStream) // Consume the stream and log the output
-    //return new Response('Oba', { status: 200 })
-    return new StreamingTextResponse(aiStream, {})
+    return new Response('Oba', { status: 200 })
+    //return new StreamingTextResponse(aiStream, {})
   } catch (error) {
     console.error('Error Streaming:', error)
     return new Response('Error', { status: 501 })
