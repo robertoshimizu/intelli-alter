@@ -38,7 +38,7 @@ export default async function RootLayout({
           >
             <div className="flex flex-col min-h-screen ">
               <Header />
-              <main className="flex flex-col flex-1 bg-muted/50 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-100 to-blue-600">
+              <main className="flex flex-col flex-1 bg-background">
                 {children}
               </main>
             </div>
