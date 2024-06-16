@@ -5,7 +5,11 @@ import {
   StreamingTextResponse
 } from 'ai'
 import { stateGraph } from '@/lib/models/state-graph'
-import { HumanMessage } from '@langchain/core/messages'
+import {
+  HumanMessage,
+  AIMessage,
+  SystemMessage
+} from '@langchain/core/messages'
 import { ChatGenerationChunk } from '@langchain/core/outputs'
 import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { StreamEvent } from '@langchain/core/dist/tracers/event_stream'
@@ -30,7 +34,6 @@ function customParser(): AIStreamParser {
         return
 
       case 'on_llm_stream':
-        console.log('on_llm_stream event:')
         const chunk: ChatGenerationChunk = event.data?.chunk
         if (!chunk) {
           console.error('Chunk is undefined or null:', event.data)
@@ -45,7 +48,6 @@ function customParser(): AIStreamParser {
         } else {
           const messageContent = msg.content
           if (messageContent) {
-            console.log('******************* KATZO **********************')
             return { isText: false, content: messageContent }
           }
         }
@@ -57,8 +59,6 @@ function customParser(): AIStreamParser {
         return
 
       default:
-        console.log('*****************************************')
-        console.error('Event:', event.event)
         return
     }
   }
@@ -81,7 +81,6 @@ function FetchStream(
         const parsed = parser(JSON.stringify(event), { event: event.event })
         if (parsed && typeof parsed !== 'string' && !parsed.isText) {
           const output = parsed.content
-          console.log('Enqueuing:', output)
           const encoder = new TextEncoder()
 
           // Format each chunk properly
@@ -107,6 +106,8 @@ function FetchStream(
 export interface Message {
   role: 'user' | 'assistant'
   content: string
+  createdAt: string
+  id: string
 }
 
 export async function POST(req: Request) {
@@ -114,15 +115,19 @@ export async function POST(req: Request) {
 
   const { messages, data } = prompt
 
-  console.log(messages)
+  const inputMessages = messages.map((message: Message) => {
+    if (message.role === 'user') {
+      return new HumanMessage(message.content)
+    } else if (message.role === 'assistant') {
+      return new AIMessage(message.content)
+    }
+  })
 
   const app = await stateGraph()
 
   const inputs = {
-    messages: [new HumanMessage('what is the weather in new york?')]
+    messages: inputMessages
   }
-
-  console.log('streaming')
 
   let config = { configurable: { thread_id: 'conversation-num-1' } }
 
@@ -138,13 +143,13 @@ export async function POST(req: Request) {
         console.log('Stream Initializad...')
       },
       onCompletion: async (completion) => {
-        console.log('Completion going:', completion)
+        //console.log('Completion going:', completion)
       },
       onFinal: async (completion) => {
         console.log('Stream COMPLTETED', completion)
       },
       onToken: async (token) => {
-        console.log('Token received', token)
+        //console.log('Token received', token)
       }
     })
 
