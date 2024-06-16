@@ -43,9 +43,7 @@ export function ChatMessage({
         <div className="ml-2  font-semibold">
           {message.role === 'user' ? 'Você' : 'IntelliDoctor'}
         </div>
-        {/* { isLoading && (
-          <div>pesquisando base de dados ... aguarde</div>
-        )} */}
+        {isLoading && <div>pesquisando base de dados ... aguarde</div>}
         <div className="ml-1 flex-1 space-y-2 overflow-hidden px-1">
           <MemoizedReactMarkdown
             className={cn(

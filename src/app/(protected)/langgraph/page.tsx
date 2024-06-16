@@ -6,7 +6,7 @@ import { ChatMessage } from '@/components/chat-message'
 import { Separator } from '@/components/ui/separator'
 
 export default function ChatPage() {
-  const [model, setModel] = useState('gemini') // Default model
+  const [model, setModel] = useState('openai') // Default model
 
   const { messages, input, handleInputChange, handleSubmit, data, isLoading } =
     useChat({
@@ -34,7 +34,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col w-full max-w-md py-14 mx-auto stretch">
+    <div className="flex flex-col w-full max-w-xl py-14 mx-auto stretch">
       <h1 className="my-4 text-2xl font-semibold">Langgraph</h1>
       {/* Model selection dropdown */}
       <div className="mb-4">
@@ -61,7 +61,7 @@ export default function ChatPage() {
 
       <form onSubmit={handleSubmit}>
         <input
-          className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl "
+          className="fixed bottom-0 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl "
           value={input}
           placeholder="Say something..."
           onChange={handleInputChange}

@@ -114,7 +114,10 @@ export async function stateGraph() {
     // You can use a prompt here to tweak model behavior.
     // You can also just pass messages to the model directly.
     const prompt = ChatPromptTemplate.fromMessages([
-      ['system', 'You are a helpful assistant.'],
+      [
+        'system',
+        'Você é um assistente de IA e responde a qualquer pergunta de maneira sucinta. Suas respostas devem ser escritas em formato markdown.'
+      ],
       new MessagesPlaceholder('messages')
     ])
     const response = await prompt.pipe(newModel).invoke({ messages })

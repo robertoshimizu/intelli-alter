@@ -130,6 +130,13 @@ export async function POST(req: Request) {
       return new AIMessage(message.content)
     }
   })
+  if (inputMessages.length === 1) {
+    inputMessages.unshift(
+      new SystemMessage(
+        'Você é um assistente de IA e responde a qualquer pergunta de maneira sucinta. Suas respostas devem ser escritas em formato markdown.'
+      )
+    )
+  }
 
   const app = await stateGraph()
 
