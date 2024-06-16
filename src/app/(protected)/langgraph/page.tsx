@@ -1,27 +1,33 @@
 'use client'
 
 import { useState } from 'react'
-import { useChat } from '@ai-sdk/react'
-
-type Message = {
-  id: number
-  role: 'user' | 'ai'
-  content: string
-}
+import { Message, useChat } from '@ai-sdk/react'
+import { ChatMessage } from '@/components/chat-message'
+import { Separator } from '@/components/ui/separator'
 
 export default function ChatPage() {
   const [model, setModel] = useState('gemini') // Default model
 
-  const { messages, input, handleInputChange, handleSubmit, data } = useChat({
-    api: '/api/langgraph',
-    body: {
-      data: {
-        model: model
+  const { messages, input, handleInputChange, handleSubmit, data, isLoading } =
+    useChat({
+      api: '/api/langgraph',
+      body: {
+        data: {
+          model: model
+        }
+      },
+      sendExtraMessageFields: true,
+      streamMode: 'stream-data',
+      onResponse: (response: Response) => {
+        console.log('Received response from server:', response)
+      },
+      onFinish: (message: Message) => {
+        console.log('Finished streaming message:', message)
+      },
+      onError: (error: Error) => {
+        console.error('An error occurred:', error)
       }
-    },
-    sendExtraMessageFields: true,
-    streamMode: 'stream-data'
-  })
+    })
 
   const handleModelChange = (event: any) => {
     setModel(event.target.value)
@@ -44,10 +50,12 @@ export default function ChatPage() {
         </select>
       </div>
 
-      {messages.map((m) => (
-        <div key={m.id} className="whitespace-pre-wrap">
-          {m.role === 'user' ? 'User: ' : 'AI: '}
-          {m.content}
+      {messages.map((message, index) => (
+        <div key={index}>
+          <ChatMessage isLoading={isLoading} message={message} />
+          {index < messages.length - 1 && (
+            <Separator className="my-4 md:my-8" />
+          )}
         </div>
       ))}
 

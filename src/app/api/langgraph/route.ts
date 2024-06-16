@@ -2,6 +2,7 @@ import {
   AIStreamCallbacksAndOptions,
   AIStreamParser,
   AIStreamParserOptions,
+  LangChainAdapter,
   StreamingTextResponse
 } from 'ai'
 import { stateGraph } from '@/lib/models/state-graph'
@@ -11,8 +12,10 @@ import {
   SystemMessage
 } from '@langchain/core/messages'
 import { ChatGenerationChunk } from '@langchain/core/outputs'
+
 import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { StreamEvent } from '@langchain/core/dist/tracers/event_stream'
+import { toAIStream } from '@/lib/adapter/langgraph-adapter'
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge'
@@ -80,11 +83,16 @@ function FetchStream(
       for await (const event of stream) {
         const parsed = parser(JSON.stringify(event), { event: event.event })
         if (parsed && typeof parsed !== 'string' && !parsed.isText) {
-          const output = parsed.content
+          let output = parsed.content
           const encoder = new TextEncoder()
+
+          console.log('Output:', output)
+          output = output.replace(/"/g, '\\"')
 
           // Format each chunk properly
           const formattedOutput = `0:"${output}"\n`
+
+          console.log('Formatted Output:', formattedOutput)
           const encodedOutput = encoder.encode(formattedOutput)
           controller.enqueue(encodedOutput)
 
@@ -138,9 +146,9 @@ export async function POST(req: Request) {
   })
 
   try {
-    const aiStream = FetchStream(graph, {
+    const aiStream = toAIStream(graph, {
       onStart: async () => {
-        console.log('Stream Initializad...')
+        //console.log('Stream Initializad...')
       },
       onCompletion: async (completion) => {
         //console.log('Completion going:', completion)
@@ -150,6 +158,9 @@ export async function POST(req: Request) {
       },
       onToken: async (token) => {
         //console.log('Token received', token)
+      },
+      onText: async (text) => {
+        //console.log('Text received', text)
       }
     })
 
