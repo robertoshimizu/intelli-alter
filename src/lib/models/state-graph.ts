@@ -1,13 +1,13 @@
 import { ChatOpenAI } from '@langchain/openai'
-import { HumanMessage, BaseMessage } from '@langchain/core/messages'
-import { END, StateGraph } from '@langchain/langgraph'
+import { HumanMessage, BaseMessage, AIMessage } from '@langchain/core/messages'
+import { START, END, StateGraph } from '@langchain/langgraph'
 import { FunctionMessage } from '@langchain/core/messages'
 import { AgentAction } from '@langchain/core/agents'
 import {
   ChatPromptTemplate,
   MessagesPlaceholder
 } from '@langchain/core/prompts'
-import { ToolExecutor } from '@langchain/langgraph/prebuilt'
+import { ToolExecutor, ToolNode } from '@langchain/langgraph/prebuilt'
 import { convertToOpenAIFunction } from '@langchain/core/utils/function_calling'
 import { TavilySearchResults } from '@langchain/community/tools/tavily_search'
 import { StructuredTool } from '@langchain/core/tools'
@@ -20,7 +20,7 @@ export async function stateGraph() {
   ] as Array<StructuredTool>
 
   // set up the tool executor
-  // @ts-ignore
+
   const toolExecutor = new ToolExecutor({ tools })
 
   // set up the model
@@ -51,6 +51,10 @@ export async function stateGraph() {
   // Whether to set or add is denoted by annotating the state object you construct the graph with.
 
   // Define the agent state, here we concatenate all messages
+  interface AgentState {
+    messages: Array<BaseMessage>
+  }
+
   const agentState = {
     messages: {
       value: (x: BaseMessage[], y: BaseMessage[]) => x.concat(y),
@@ -114,10 +118,7 @@ export async function stateGraph() {
     // You can use a prompt here to tweak model behavior.
     // You can also just pass messages to the model directly.
     const prompt = ChatPromptTemplate.fromMessages([
-      [
-        'system',
-        'Você é um assistente de IA e responde a qualquer pergunta de maneira sucinta. Suas respostas devem ser escritas em formato markdown.'
-      ],
+      ['system', 'You are a helpful assistant.'],
       new MessagesPlaceholder('messages')
     ])
     const response = await prompt.pipe(newModel).invoke({ messages })
@@ -142,7 +143,7 @@ export async function stateGraph() {
 
   // Define THE GRAPH
 
-  const workflow = new StateGraph({
+  const workflow = new StateGraph<AgentState, unknown, string>({
     channels: agentState
   })
 
@@ -152,7 +153,7 @@ export async function stateGraph() {
 
   // Set the entrypoint as `agent`
   // This means that this node is the first one called
-  workflow.setEntryPoint('agent')
+  workflow.addEdge(START, 'agent')
 
   // We now add a conditional edge
   workflow.addConditionalEdges(
