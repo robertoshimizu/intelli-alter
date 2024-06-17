@@ -18,6 +18,8 @@ import { convertToOpenAIFunction } from '@langchain/core/utils/function_calling'
 import { TavilySearchResults } from '@langchain/community/tools/tavily_search'
 import { StructuredTool } from '@langchain/core/tools'
 import { ChatAnthropic } from '@langchain/anthropic'
+import { ChatMistralAI } from '@langchain/mistralai'
+import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
 
 export async function stateGraph() {
   console.log('stateGraph...')
@@ -44,6 +46,19 @@ export async function stateGraph() {
   // const model = new ChatAnthropic({
   //   model: 'claude-3-haiku-20240307',
   //   temperature: 0,
+  //   streaming: true
+  // })
+
+  // const model = new ChatMistralAI({
+  //   temperature: 0.0,
+  //   streaming: true,
+  //   model: 'mistral-large-latest' // context window 32k
+  // })
+
+  // const model = new ChatGoogleGenerativeAI({
+  //   temperature: 0.0,
+  //   model: 'gemini-1.5-pro-latest', // context window 1M
+  //   apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
   //   streaming: true
   // })
 
