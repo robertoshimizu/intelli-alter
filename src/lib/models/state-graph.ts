@@ -39,6 +39,7 @@ export async function stateGraph() {
   // See the streaming section for more information on this.
 
   const model = new ChatOpenAI({
+    modelName: 'gpt-3.5-turbo',
     temperature: 0,
     streaming: true
   })
