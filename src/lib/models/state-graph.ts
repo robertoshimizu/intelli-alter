@@ -76,15 +76,6 @@ export async function stateGraph() {
 
   const newModel = model.bindTools(tools)
 
-  // STATE GRAPH
-  // This time, we'll use the more general StateGraph.
-  // This graph is parameterized by a state object that it passes around to each node.
-  // Remember that each node then returns operations to update that state.
-  // These operations can either SET specific attributes on the state (e.g. overwrite the existing values)
-  // or ADD to the existing attribute.
-  // Whether to set or add is denoted by annotating the state object you construct the graph with.
-
-  // Define the agent state, here we concatenate all messages
   interface AgentState {
     messages: Array<BaseMessage>
   }
@@ -96,20 +87,6 @@ export async function stateGraph() {
     }
   }
 
-  // Add nodes to the graph
-  // In LangGraph, a node can be either a function or a runnable.
-  // There are two main nodes we need for this:
-  // - The agent: responsible for deciding what (if any) actions to take.
-  // = A function to invoke tools: if the agent decides to take an action,
-  // this node will then execute that action.
-
-  // Edges
-  // Conditional Edge: after the agent is called, we should either:
-  // a. If the agent said to take an action, then the function to invoke tools should be called
-  // b. If the agent said that it was finished, then it should finish
-  // Normal Edge: after the tools are invoked, it should always go back to the agent to decide what to do next
-
-  // Define the function that determines whether to continue or not
   const shouldContinue = (state: { messages: Array<BaseMessage> }) => {
     console.log('shouldContinue ...')
     const { messages } = state
@@ -177,7 +154,7 @@ export async function stateGraph() {
   const callTool = async (state: { messages: Array<BaseMessage> }) => {
     console.log('callTool ...')
     const action = _getAction(state)
-    console.log('action', JSON.stringify(action))
+    console.log('action', JSON.stringify(action), '\n')
     // We call the tool_executor and get back a response
     const toolResponse = await toolExecutor.invoke(action)
     console.log('Tool response', JSON.stringify(toolResponse), '\n')
@@ -198,43 +175,18 @@ export async function stateGraph() {
     channels: agentState
   })
 
+  workflow.addEdge(START, 'agent')
   // Define the two nodes we will cycle between
   workflow.addNode('agent', callModel)
   workflow.addNode('action', callTool)
 
-  // Set the entrypoint as `agent`
-  // This means that this node is the first one called
-  workflow.addEdge(START, 'agent')
-  //workflow.addEdge('agent', END)
+  workflow.addConditionalEdges('agent', shouldContinue, {
+    continue: 'action',
+    end: END
+  })
 
-  // We now add a conditional edge
-  workflow.addConditionalEdges(
-    // First, we define the start node. We use `agent`.
-    // This means these are the edges taken after the `agent` node is called.
-    'agent',
-    // Next, we pass in the function that will determine which node is called next.
-    shouldContinue,
-    // Finally we pass in a mapping.
-    // The keys are strings, and the values are other nodes.
-    // END is a special node marking that the graph should finish.
-    // What will happen is we will call `should_continue`, and then the output of that
-    // will be matched against the keys in this mapping.
-    // Based on which one it matches, that node will then be called.
-    {
-      // If `tools`, then we call the tool node.
-      continue: 'action',
-      // Otherwise we finish.
-      end: END
-    }
-  )
-
-  // We now add a normal edge from `tools` to `agent`.
-  // This means that after `tools` is called, `agent` node is called next.
   workflow.addEdge('action', 'agent')
 
-  // Finally, we compile it!
-  // This compiles it into a LangChain Runnable,
-  // meaning you can use it as you would any other runnable
   const app = workflow.compile()
 
   return app
