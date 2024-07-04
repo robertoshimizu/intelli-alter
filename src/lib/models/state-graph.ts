@@ -38,11 +38,11 @@ export async function stateGraph() {
   // We will set streaming: true so that we can stream tokens
   // See the streaming section for more information on this.
 
-  const model = new ChatOpenAI({
-    modelName: 'gpt-3.5-turbo',
-    temperature: 0,
-    streaming: true
-  })
+  // const model = new ChatOpenAI({
+  //   modelName: 'gpt-3.5-turbo',
+  //   temperature: 0,
+  //   streaming: true
+  // })
 
   // const model = new ChatAnthropic({
   //   model: 'claude-3-haiku-20240307',
@@ -50,11 +50,11 @@ export async function stateGraph() {
   //   streaming: true
   // })
 
-  // const model = new ChatMistralAI({
-  //   temperature: 0.0,
-  //   streaming: true,
-  //   model: 'mistral-large-latest' // context window 32k
-  // })
+  const model = new ChatMistralAI({
+    temperature: 0.0,
+    streaming: true,
+    model: 'mistral-large-latest' // context window 32k
+  })
 
   // const model = new ChatGoogleGenerativeAI({
   //   temperature: 0.0,

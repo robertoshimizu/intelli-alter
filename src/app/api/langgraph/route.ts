@@ -16,6 +16,7 @@ import { ChatGenerationChunk } from '@langchain/core/outputs'
 import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { StreamEvent } from '@langchain/core/dist/tracers/event_stream'
 import { toAIStream } from '@/lib/adapter/langgraph-adapter'
+import { intelliGraph } from '@/lib/models/intelli-graph'
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge'
@@ -138,7 +139,8 @@ export async function POST(req: Request) {
     )
   }
 
-  const app = await stateGraph()
+  //const app = await stateGraph()
+  const app = await intelliGraph()
 
   const inputs = {
     messages: inputMessages
