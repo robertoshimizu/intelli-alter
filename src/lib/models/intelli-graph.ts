@@ -4,7 +4,8 @@ import {
   BaseMessage,
   AIMessage,
   AIMessageChunk,
-  ToolMessage
+  ToolMessage,
+  MessageContent
 } from '@langchain/core/messages'
 import { END, START, StateGraph, StateGraphArgs } from '@langchain/langgraph'
 import { FunctionMessage } from '@langchain/core/messages'
@@ -20,6 +21,7 @@ import * as z from 'zod'
 import { topicfier } from './topicfier'
 import { RunnableConfig } from '@langchain/core/runnables'
 import { MemorySaver } from '@langchain/langgraph'
+import { Message } from 'ai'
 
 export async function intelliGraph() {
   // First node
@@ -121,20 +123,38 @@ export async function intelliGraph() {
 
   // Define the function which tells what kind of BaseMessage
 
-  function baseType(message: HumanMessage | AIMessage | FunctionMessage) {
+  function baseType(
+    message: HumanMessage | AIMessage | FunctionMessage | AIMessageChunk
+  ) {
     if (message.lc_id.includes('HumanMessage')) return 'HumanMessage' as const
     if (message.lc_id.includes('AIMessage')) return 'AIMessage' as const
     if (message.lc_id.includes('FunctionMessage'))
       return 'FunctionMessage' as const
+    if (message.lc_id.includes('AIMessageChunk'))
+      return 'AIMessageChunk' as const
+    if (message.lc_id.includes('ToolMessage')) return 'ToolMessage' as const
     return 'Unknown' as const
   }
+  function get_json_topic(lastMessage: any) {
+    const parsed = lastMessage as ToolMessage
+    const content = parsed.content
+    // @ts-ignore
+    const x = JSON.parse(content)
+    const argus = x.kwargs.additional_kwargs.function_call.arguments
 
+    const json_topic = topic_schema.parse(JSON.parse(argus))
+    return json_topic
+  }
   const shouldContinue = (state: { messages: Array<BaseMessage> }) => {
     console.log('Passing through shouldContinue', '\n')
     // console.log(JSON.stringify(state, null, 2), '\n')
     const { messages } = state
-    const lastMessage: HumanMessage | AIMessage | FunctionMessage =
-      messages[messages.length - 1]
+    const lastMessage:
+      | HumanMessage
+      | AIMessage
+      | FunctionMessage
+      | ToolMessage
+      | AIMessageChunk = messages[messages.length - 1]
 
     const content = lastMessage.content as string
 
@@ -151,7 +171,7 @@ export async function intelliGraph() {
 
     // If there is no function call, then we finish
 
-    if (message_type === 'AIMessage') {
+    if (message_type === 'AIMessage' || message_type === 'AIMessageChunk') {
       if (
         lastMessage.additional_kwargs.tool_calls ||
         lastMessage.lc_kwargs.tool_calls
@@ -163,15 +183,18 @@ export async function intelliGraph() {
       } else return 'end'
     }
 
-    if (message_type === 'FunctionMessage') {
-      const parsed = JSON.parse(content)
-      const json_topic = topic_schema.parse(parsed)
-      const { topic, sub_topic } = json_topic
+    if (message_type === 'FunctionMessage' || message_type === 'ToolMessage') {
+      if (message_type === 'ToolMessage') {
+        console.log('ENTERING TOOL MESSAGE')
 
-      console.log('json_topic', topic, ' ', sub_topic)
+        const json_topic = get_json_topic(lastMessage)
+        const { topic, sub_topic } = json_topic
 
-      if (topic === 'medicine' && sub_topic === 'ambiguous') {
-        return 'desambiguate'
+        console.log('json_topic', topic, ' ', sub_topic)
+
+        if (topic === 'medicine' && sub_topic === 'ambiguous') {
+          return 'desambiguate'
+        } else return 'response'
       }
     }
 
@@ -203,7 +226,7 @@ export async function intelliGraph() {
   // Define the function that calls the model
   const determine_topic = async (state: State, config?: RunnableConfig) => {
     console.log('GateKeeper -> determine_topic')
-    console.log(JSON.stringify(state, null, 2), '\n')
+    //console.log(JSON.stringify(state, null, 2), '\n')
     const { messages } = state
 
     const lastMessage = messages[messages.length - 1]
@@ -244,15 +267,17 @@ export async function intelliGraph() {
   }
   // Define the function that calls the model
   const desambiguate = async (state: State, config?: RunnableConfig) => {
+    const { messages } = state
+    const lastMessage:
+      | HumanMessage
+      | AIMessage
+      | FunctionMessage
+      | ToolMessage = messages[messages.length - 1]
     console.log(
       'Passing through Desambiguate -> desambiguate',
-      JSON.stringify(state, null, 2),
+      lastMessage,
       '\n'
     )
-    const { messages } = state
-    const lastMessage: HumanMessage | AIMessage | FunctionMessage =
-      messages[messages.length - 1]
-
     // implement persistance
 
     const prompt = ChatPromptTemplate.fromMessages([
@@ -264,10 +289,53 @@ export async function intelliGraph() {
       new MessagesPlaceholder('messages')
     ])
 
+    const json_topic = get_json_topic(lastMessage)
+    console.log('json_topic', json_topic)
+
     try {
       const response = await prompt
         .pipe(model)
-        .invoke({ messages: [lastMessage] })
+        .invoke({ messages: [new AIMessage(JSON.stringify(json_topic))] })
+
+      console.log('response', response)
+
+      // We return a list, because this will get added to the existing list
+      return {
+        messages: [response]
+      }
+    } catch (error) {
+      console.log('erroreor', error)
+      return {
+        messages: []
+      }
+    }
+  }
+
+  // Define the function that calls the model
+  const respond_back = async (state: State, config?: RunnableConfig) => {
+    const { messages } = state
+    const lastMessage:
+      | HumanMessage
+      | AIMessage
+      | FunctionMessage
+      | ToolMessage = messages[messages.length - 1]
+    console.log('Passing through RespondBack', lastMessage, '\n')
+    // implement persistance
+
+    const prompt = ChatPromptTemplate.fromMessages([
+      [
+        'system',
+        `You are going to receive a stringified json with structure like {{topic: medicine, sub_topic: medicaments, clarifying_question: 
+         options: , language: en}}. Use this only as a reference. Look at the last HumanMessages and AIMessages and answer what is being asked within the context of the conversation.`
+      ],
+      new MessagesPlaceholder('messages')
+    ])
+
+    const json_topic = get_json_topic(lastMessage)
+    console.log('json_topic', json_topic)
+
+    try {
+      const response = await prompt.pipe(model).invoke({ messages })
 
       console.log('response', response)
 
@@ -311,15 +379,18 @@ export async function intelliGraph() {
     .addNode('GateKeeper', determine_topic)
     .addEdge(START, 'GateKeeper')
     .addNode('MedExpert', determine_subtopic)
+    .addNode('Response', respond_back)
     .addNode('Desambiguate', desambiguate)
     .addConditionalEdges('GateKeeper', shouldContinue, {
       // If `tools`, then we call the tool node.
       get_topic: 'MedExpert',
       desambiguate: 'Desambiguate',
+      response: 'Response',
       end: END
     })
     .addEdge('MedExpert', 'GateKeeper')
     .addEdge('Desambiguate', END)
+    .addEdge('Response', END)
   // Finally, we compile it!
   // This compiles it into a LangChain Runnable,
   // meaning you can use it as you would any other runnable
