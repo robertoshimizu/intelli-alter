@@ -31,7 +31,7 @@ const prompt = ChatPromptTemplate.fromMessages([
   ['user', '{inputText}']
 ])
 
-const model = chatModel('gpt-3.5-turbo')
+const model = chatModel('gpt-4o')
 
 const llm = model
 

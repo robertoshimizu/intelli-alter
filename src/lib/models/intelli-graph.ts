@@ -5,7 +5,8 @@ import {
   AIMessage,
   AIMessageChunk,
   ToolMessage,
-  MessageContent
+  MessageContent,
+  SystemMessage
 } from '@langchain/core/messages'
 import { END, START, StateGraph, StateGraphArgs } from '@langchain/langgraph'
 import { FunctionMessage } from '@langchain/core/messages'
@@ -21,9 +22,25 @@ import * as z from 'zod'
 import { topicfier } from './topicfier'
 import { RunnableConfig } from '@langchain/core/runnables'
 import { MemorySaver } from '@langchain/langgraph'
-import { Message } from 'ai'
+import { User, currentUser } from '@clerk/nextjs/server'
+import {
+  getMemory,
+  isValidMemory,
+  Memory,
+  removeMemory,
+  saveMemory
+} from '../actions/kv_memory'
+import { m } from 'framer-motion'
+import { remove } from 'cheerio/lib/api/manipulation'
 
 export async function intelliGraph() {
+  // Contemplate Google Provider, which doesn't have an id
+  const user = (await currentUser()) as User
+  if (user === null) {
+    throw new Error('User not found')
+  }
+  console.log('User:', user.id)
+
   // First node
   // agent 0 : classify a question into a category.
   // if it is a medical question, then call a tool to get the sub-topic
@@ -145,7 +162,7 @@ export async function intelliGraph() {
     const json_topic = topic_schema.parse(JSON.parse(argus))
     return json_topic
   }
-  const shouldContinue = (state: { messages: Array<BaseMessage> }) => {
+  const shouldContinue = async (state: { messages: Array<BaseMessage> }) => {
     console.log('Passing through shouldContinue', '\n')
     // console.log(JSON.stringify(state, null, 2), '\n')
     const { messages } = state
@@ -180,7 +197,7 @@ export async function intelliGraph() {
         console.log('tools_call 2', lastMessage.lc_kwargs.tool_calls)
 
         return 'get_topic'
-      } else return 'end'
+      } else return 'response'
     }
 
     if (message_type === 'FunctionMessage' || message_type === 'ToolMessage') {
@@ -193,12 +210,16 @@ export async function intelliGraph() {
         console.log('json_topic', topic, ' ', sub_topic)
 
         if (topic === 'medicine' && sub_topic === 'ambiguous') {
+          if (isValidMemory(json_topic)) {
+            console.log('Memory is valid')
+            await saveMemory({ userId: user.id, payload: json_topic })
+          } else console.log('Memory is not valid')
           return 'desambiguate'
         } else return 'response'
       }
     }
 
-    return 'end'
+    return 'response'
   }
 
   // Define the function to execute tools
@@ -240,28 +261,53 @@ export async function intelliGraph() {
       message_type
     )
 
-    // check persistance to see if we have already asked the user to clarify
+    //await removeMemory({ userId: user.id })
 
-    if (!lastMessage) {
-      throw new Error('No messages found.')
-    }
-    if (lastMessage instanceof HumanMessage) {
-      const prompt = ChatPromptTemplate.fromMessages([
-        [
-          'system',
-          'You are a AI assistant with the solely mission to identify if a message by human falls into the subject of medicine. All queries related to anything related to medicine, healthcare, nutrition, nursery, dentistry, psicology, consider them as topic:  medicine, this is very important. If not, just consider them as general questions.'
-        ],
+    // check persistance to see if we have already asked the user to clarify
+    const memory = await getMemory({ userId: user.id })
+    console.log('Memory retrieved from KV: ', memory)
+
+    if (memory) {
+      const sys_message = new SystemMessage(
+        `Você deve reconciliar a ambiguidade da última mensagem: ${JSON.stringify(
+          memory
+        )} com a opcao provida pelo usuário, para fazer a classificacao final do sub_topico.`
+      )
+      messages.push(sys_message)
+
+      // invoke the model with the last message
+      // Tem que forcar a retornar um json com a estrutura do schema
+
+      const response = await ChatPromptTemplate.fromMessages([
         new MessagesPlaceholder('messages')
       ])
-
-      const response = await prompt.pipe(newModel).invoke({ messages })
-      // We return a list, because this will get added to the existing list
+        .pipe(model)
+        .invoke({ messages })
       return {
         messages: [response]
       }
     } else {
-      return {
-        messages: []
+      if (!lastMessage) {
+        throw new Error('No messages found.')
+      }
+      if (lastMessage instanceof HumanMessage) {
+        const prompt = ChatPromptTemplate.fromMessages([
+          [
+            'system',
+            'You are a AI assistant with the solely mission to identify if a message by human falls into the subject of medicine. All queries related to anything related to medicine, healthcare, nutrition, nursery, dentistry, psicology, consider them as topic:  medicine, this is very important. If not, just consider them as general questions.'
+          ],
+          new MessagesPlaceholder('messages')
+        ])
+
+        const response = await prompt.pipe(newModel).invoke({ messages })
+        // We return a list, because this will get added to the existing list
+        return {
+          messages: [response]
+        }
+      } else {
+        return {
+          messages: []
+        }
       }
     }
   }
