@@ -77,12 +77,12 @@ export async function intelliGraph() {
   const get_query_topic = new DynamicStructuredTool({
     name: 'Query_Topic',
     description: `This task involves identify the right topic for the user query and return the json: {"topic:  "medicine", "sub_topic": "health_technology_assessment"}
-                  Analyze the thread and if the last human message is an option of a previous ambiguous question, the return the number of the option selected.
+                  .
                   `,
     schema: z.object({
       question: z.string().describe(
         `question is a string that represents the user query. It can be anything from a single word to a full sentence and it should contain the idea of what is questioned. 
-          OR it can be a option (numerical or not) that represents the option selected by the user in a previous ambiguous question.`
+          If the previous messages was disambiguation, then the question should be the answer to the clarifying question.`
       )
     }),
     func: async ({ question }) => {
@@ -261,53 +261,44 @@ export async function intelliGraph() {
       message_type
     )
 
-    //await removeMemory({ userId: user.id })
+    if (!lastMessage) {
+      throw new Error('No messages found.')
+    }
+    if (lastMessage instanceof HumanMessage) {
+      // check persistance to see if we have already asked the user to clarify
+      const memory = await getMemory({ userId: user.id })
+      console.log('Memory retrieved from KV: ', memory)
+      if (memory) {
+        await removeMemory({ userId: user.id })
+      }
 
-    // check persistance to see if we have already asked the user to clarify
-    const memory = await getMemory({ userId: user.id })
-    console.log('Memory retrieved from KV: ', memory)
+      const memory_string = JSON.stringify(memory)
 
-    if (memory) {
-      const sys_message = new SystemMessage(
-        `Você deve reconciliar a ambiguidade da última mensagem: ${JSON.stringify(
-          memory
-        )} com a opcao provida pelo usuário, para fazer a classificacao final do sub_topico.`
-      )
-      messages.push(sys_message)
-
-      // invoke the model with the last message
-      // Tem que forcar a retornar um json com a estrutura do schema
-
-      const response = await ChatPromptTemplate.fromMessages([
+      let prompt = ChatPromptTemplate.fromMessages([
+        [
+          'system',
+          'You are a AI assistant with the solely mission to identify if a message by human falls into the subject of medicine. All queries related to anything related to medicine, healthcare, nutrition, nursery, dentistry, psicology, consider them as topic:  medicine, this is very important. If not, just consider them as general questions.'
+        ],
         new MessagesPlaceholder('messages')
       ])
-        .pipe(model)
-        .invoke({ messages })
+
+      if (memory) {
+        const new_system_message = new HumanMessage(
+          `Eis minha opcao ${lastMessage.content} para desambiguar minha pergunta anterior: ${memory_string}`
+        )
+        messages.push(new_system_message)
+      }
+
+      const response = await prompt.pipe(newModel).invoke({ messages })
+
+      //console.log('response', response)
+      // We return a list, because this will get added to the existing list
       return {
         messages: [response]
       }
     } else {
-      if (!lastMessage) {
-        throw new Error('No messages found.')
-      }
-      if (lastMessage instanceof HumanMessage) {
-        const prompt = ChatPromptTemplate.fromMessages([
-          [
-            'system',
-            'You are a AI assistant with the solely mission to identify if a message by human falls into the subject of medicine. All queries related to anything related to medicine, healthcare, nutrition, nursery, dentistry, psicology, consider them as topic:  medicine, this is very important. If not, just consider them as general questions.'
-          ],
-          new MessagesPlaceholder('messages')
-        ])
-
-        const response = await prompt.pipe(newModel).invoke({ messages })
-        // We return a list, because this will get added to the existing list
-        return {
-          messages: [response]
-        }
-      } else {
-        return {
-          messages: []
-        }
+      return {
+        messages: []
       }
     }
   }
@@ -372,7 +363,7 @@ export async function intelliGraph() {
       [
         'system',
         `You are going to receive a stringified json with structure like {{topic: medicine, sub_topic: medicaments, clarifying_question: 
-         options: , language: en}}. Use this only as a reference. Look at the last HumanMessages and AIMessages and answer what is being asked within the context of the conversation.`
+         options: , language: en}}. Use this only as a reference. Look at the last messages and reflect on the dialogue, then try to answer what is being asked within the context of the conversation.`
       ],
       new MessagesPlaceholder('messages')
     ])
