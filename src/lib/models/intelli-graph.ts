@@ -91,31 +91,6 @@ export async function intelliGraph() {
     }
   })
 
-  const tools = [get_query_topic] as Array<StructuredTool>
-
-  // set up the tool executor
-  // @ts-ignore
-  const toolExecutor = new ToolExecutor({ tools })
-
-  // set up the model
-  // We will set streaming: true so that we can stream tokens
-  // See the streaming section for more information on this.
-  const model = new ChatOpenAI({
-    model: 'gpt-3.5-turbo-0125',
-    temperature: 0,
-    streaming: false
-  })
-
-  // we should make sure the model knows that it has these tools available to call.
-  // We can do this by converting the LangChain tools into the format for OpenAI
-  // function calling, and then bind them to the model class.
-
-  // const toolsAsOpenAIFunctions = tools.map((tool) =>
-  //   convertToOpenAIFunction(tool)
-  // )
-  const newModel = model.bindTools(tools, {
-    tool_choice: { type: 'function', function: { name: 'Query_Topic' } }
-  })
   // STATE GRAPH
   // This time, we'll use the more general StateGraph.
   // This graph is parameterized by a state object that it passes around to each node.
@@ -162,65 +137,6 @@ export async function intelliGraph() {
     const json_topic = topic_schema.parse(JSON.parse(argus))
     return json_topic
   }
-  const shouldContinue = async (state: { messages: Array<BaseMessage> }) => {
-    console.log('Passing through shouldContinue', '\n')
-    // console.log(JSON.stringify(state, null, 2), '\n')
-    const { messages } = state
-    const lastMessage:
-      | HumanMessage
-      | AIMessage
-      | FunctionMessage
-      | ToolMessage
-      | AIMessageChunk = messages[messages.length - 1]
-
-    const content = lastMessage.content as string
-
-    const isSerial: boolean = isSerializableToObject(content)
-
-    const message_type = baseType(lastMessage)
-
-    console.log(
-      'Understand lastMessage',
-      JSON.stringify(lastMessage, null, 2),
-      '\n',
-      message_type
-    )
-
-    // If there is no function call, then we finish
-
-    if (message_type === 'AIMessage' || message_type === 'AIMessageChunk') {
-      if (
-        lastMessage.additional_kwargs.tool_calls ||
-        lastMessage.lc_kwargs.tool_calls
-      ) {
-        console.log('tools_call 1', lastMessage.additional_kwargs.tool_calls)
-        console.log('tools_call 2', lastMessage.lc_kwargs.tool_calls)
-
-        return 'get_topic'
-      } else return 'response'
-    }
-
-    if (message_type === 'FunctionMessage' || message_type === 'ToolMessage') {
-      if (message_type === 'ToolMessage') {
-        console.log('ENTERING TOOL MESSAGE')
-
-        const json_topic = get_json_topic(lastMessage)
-        const { topic, sub_topic } = json_topic
-
-        console.log('json_topic', topic, ' ', sub_topic)
-
-        if (topic === 'medicine' && sub_topic === 'ambiguous') {
-          if (isValidMemory(json_topic)) {
-            console.log('Memory is valid')
-            await saveMemory({ userId: user.id, payload: json_topic })
-          } else console.log('Memory is not valid')
-          return 'desambiguate'
-        } else return 'response'
-      }
-    }
-
-    return 'response'
-  }
 
   // Define the function to execute tools
   const _getAction = (state: { messages: Array<BaseMessage> }): AgentAction => {
@@ -246,7 +162,7 @@ export async function intelliGraph() {
 
   // Define the function that calls the model
   const determine_topic = async (state: State, config?: RunnableConfig) => {
-    console.log('GateKeeper -> determine_topic')
+    console.log('\n******************** TOPIC AGENT *******************')
     //console.log(JSON.stringify(state, null, 2), '\n')
     const { messages } = state
 
@@ -289,6 +205,18 @@ export async function intelliGraph() {
         messages.push(new_system_message)
       }
 
+      const model = new ChatOpenAI({
+        model: 'gpt-3.5-turbo',
+        temperature: 0,
+        streaming: false
+      })
+
+      const tools = [get_query_topic] as Array<StructuredTool>
+
+      const newModel = model.bindTools(tools, {
+        tool_choice: { type: 'function', function: { name: 'Query_Topic' } }
+      })
+
       const response = await prompt.pipe(newModel).invoke({ messages })
 
       //console.log('response', response)
@@ -301,6 +229,31 @@ export async function intelliGraph() {
         messages: []
       }
     }
+  }
+
+  const determine_subtopic = async (state: State, config?: RunnableConfig) => {
+    console.log(
+      'Passing through TopicExpert -> determine_subtopic',
+      JSON.stringify(state, null, 2),
+      '\n'
+    )
+    const action = _getAction(state)
+    // We call the tool_executor and get back a response
+    const tools = [get_query_topic] as Array<StructuredTool>
+
+    // @ts-ignore
+    const toolExecutor = new ToolExecutor({ tools })
+
+    const toolResponse = await toolExecutor.invoke(action)
+
+    // We use the response to create a ToolMessage
+    const toolMessage = new ToolMessage({
+      tool_call_id: action.log,
+      content: toolResponse
+    })
+    console.log('toolMessage', toolMessage, '\n')
+    // We return a list, because this will get added to the existing list
+    return { messages: [toolMessage] }
   }
   // Define the function that calls the model
   const desambiguate = async (state: State, config?: RunnableConfig) => {
@@ -330,6 +283,11 @@ export async function intelliGraph() {
     console.log('json_topic', json_topic)
 
     try {
+      const model = new ChatOpenAI({
+        model: 'gpt-3.5-turbo',
+        temperature: 0,
+        streaming: false
+      })
       const response = await prompt
         .pipe(model)
         .invoke({ messages: [new AIMessage(JSON.stringify(json_topic))] })
@@ -348,15 +306,110 @@ export async function intelliGraph() {
     }
   }
 
+  const shouldContinueTopic = async (state: {
+    messages: Array<BaseMessage>
+  }) => {
+    console.log('Passing through shouldContinue', '\n')
+    // console.log(JSON.stringify(state, null, 2), '\n')
+    const { messages } = state
+    const lastMessage:
+      | HumanMessage
+      | AIMessage
+      | FunctionMessage
+      | ToolMessage
+      | AIMessageChunk = messages[messages.length - 1]
+
+    const content = lastMessage.content as string
+
+    const isSerial: boolean = isSerializableToObject(content)
+
+    const message_type = baseType(lastMessage)
+
+    console.log(
+      'Understand lastMessage',
+      JSON.stringify(lastMessage, null, 2),
+      '\n',
+      message_type
+    )
+
+    // If there is no function call, then we finish
+
+    if (message_type === 'AIMessage' || message_type === 'AIMessageChunk') {
+      if (
+        lastMessage.additional_kwargs.tool_calls ||
+        lastMessage.lc_kwargs.tool_calls
+      ) {
+        console.log('tools_call 1', lastMessage.additional_kwargs.tool_calls)
+        console.log('tools_call 2', lastMessage.lc_kwargs.tool_calls)
+
+        return 'get_topic'
+      } else return 'modelAgent'
+    }
+
+    if (message_type === 'FunctionMessage' || message_type === 'ToolMessage') {
+      if (message_type === 'ToolMessage') {
+        console.log('ENTERING TOOL MESSAGE')
+
+        const json_topic = get_json_topic(lastMessage)
+        const { topic, sub_topic } = json_topic
+
+        console.log('json_topic', topic, ' ', sub_topic)
+
+        if (topic === 'medicine' && sub_topic === 'ambiguous') {
+          if (isValidMemory(json_topic)) {
+            console.log('Memory is valid')
+            await saveMemory({ userId: user.id, payload: json_topic })
+          } else console.log('Memory is not valid')
+          return 'desambiguate'
+        } else return 'modelAgent'
+      }
+    }
+
+    return 'modelAgent'
+  }
+  const getMedicaments = new DynamicStructuredTool({
+    name: 'getMedicaments',
+    description:
+      'For detailed information on specific medications, including active ingredients, recommended dosages per condition, potential side effects, drug interactions, and contraindications. Use this prompt for pharmacological inquiries.',
+    schema: z.object({
+      nameOfMedicine: z
+        .string()
+        .describe(
+          'name of the medication (active substances or commercial name) translated to the active substance in the English language. The translation to English language is mandatory.'
+        )
+    }),
+    func: async ({ nameOfMedicine }) => {
+      // const result = await get_medicaments(nameOfMedicine)
+      return 'posologia da amoxicilina é 500mg a cada 8 horas.'.toString()
+    }
+  })
+
+  const getTreatments = new DynamicStructuredTool({
+    name: 'getTreatments',
+    description:
+      'For detailed information on specific treatments for a given disease or clinical condition.',
+    schema: z.object({
+      nameOfDisease: z
+        .string()
+        .describe(
+          'name of the disease or clinical condition in the English language. The translation to English language is mandatory.'
+        )
+    }),
+    func: async ({ nameOfDisease }) => {
+      // const result = await get_Treatments(nameOfMedicine)
+      return 'tratamento de asma usa berotec'.toString()
+    }
+  })
+
   // Define the function that calls the model
-  const respond_back = async (state: State, config?: RunnableConfig) => {
+  const callModel = async (state: State, config?: RunnableConfig) => {
     const { messages } = state
     const lastMessage:
       | HumanMessage
       | AIMessage
       | FunctionMessage
       | ToolMessage = messages[messages.length - 1]
-    console.log('Passing through RespondBack', lastMessage, '\n')
+    console.log('\n******************** Model AGENT *******************')
     // implement persistance
 
     const prompt = ChatPromptTemplate.fromMessages([
@@ -371,8 +424,29 @@ export async function intelliGraph() {
     const json_topic = get_json_topic(lastMessage)
     console.log('json_topic', json_topic)
 
+    let tools: any = []
+    let chosen_tool: any = 'getMedicaments'
+    switch (json_topic.sub_topic) {
+      case 'medications':
+        tools = [getMedicaments]
+        break
+      case 'treatments':
+        tools = [getTreatments]
+        chosen_tool = 'getTreatments'
+        break
+      default:
+        break
+    }
+
+    const llm = new ChatOpenAI({
+      modelName: 'gpt-3.5-turbo',
+      temperature: 0
+    }).bindTools(tools, {
+      tool_choice: { type: 'function', function: { name: chosen_tool } }
+    })
+
     try {
-      const response = await prompt.pipe(model).invoke({ messages })
+      const response = await prompt.pipe(llm).invoke({ messages })
 
       console.log('response', response)
 
@@ -388,14 +462,16 @@ export async function intelliGraph() {
     }
   }
 
-  const determine_subtopic = async (state: State, config?: RunnableConfig) => {
-    console.log(
-      'Passing through MedExpert -> determine_subtopic',
-      JSON.stringify(state, null, 2),
-      '\n'
-    )
+  const callTool = async (state: { messages: Array<BaseMessage> }) => {
+    console.log('\n******************** callTool Model *******************')
     const action = _getAction(state)
+    console.log('action', action)
     // We call the tool_executor and get back a response
+    const tools = [getMedicaments, getTreatments] as Array<StructuredTool>
+
+    // @ts-ignore
+    const toolExecutor = new ToolExecutor({ tools })
+
     const toolResponse = await toolExecutor.invoke(action)
 
     // We use the response to create a ToolMessage
@@ -408,26 +484,83 @@ export async function intelliGraph() {
     return { messages: [toolMessage] }
   }
 
+  const shouldContinueModel = async (state: {
+    messages: Array<BaseMessage>
+  }) => {
+    console.log(
+      '\n******************** SHouldContinueModel *******************'
+    )
+    // console.log(JSON.stringify(state, null, 2), '\n')
+    const { messages } = state
+    const lastMessage:
+      | HumanMessage
+      | AIMessage
+      | FunctionMessage
+      | ToolMessage
+      | AIMessageChunk = messages[messages.length - 1]
+
+    const content = lastMessage.content as string
+
+    const isSerial: boolean = isSerializableToObject(content)
+
+    const message_type = baseType(lastMessage)
+
+    console.log(
+      'Understand lastMessage',
+      JSON.stringify(lastMessage, null, 2),
+      '\n',
+      message_type
+    )
+
+    // If there is no function call, then we finish
+
+    if (message_type === 'AIMessage' || message_type === 'AIMessageChunk') {
+      if (
+        lastMessage.additional_kwargs.tool_calls ||
+        lastMessage.lc_kwargs.tool_calls
+      ) {
+        console.log('tools_call 1', lastMessage.additional_kwargs.tool_calls)
+        console.log('tools_call 2', lastMessage.lc_kwargs.tool_calls)
+        return 'execute_model'
+      }
+      return 'end'
+    }
+
+    if (message_type === 'FunctionMessage' || message_type === 'ToolMessage') {
+      console.log('ENTERING TOOL MESSAGE')
+
+      return 'execute_model'
+    }
+
+    return 'end'
+  }
+
   // Define THE GRAPH
 
   const workflow = new StateGraph({
     channels: agentState
   })
-    .addNode('GateKeeper', determine_topic)
-    .addEdge(START, 'GateKeeper')
-    .addNode('MedExpert', determine_subtopic)
-    .addNode('Response', respond_back)
+    .addNode('TopicAgent', determine_topic)
+    .addEdge(START, 'TopicAgent')
+    .addNode('TopicExpert', determine_subtopic)
+    .addNode('ModelAgent', callModel)
+    .addNode('ModelExpert', callTool)
     .addNode('Desambiguate', desambiguate)
-    .addConditionalEdges('GateKeeper', shouldContinue, {
+    .addConditionalEdges('TopicAgent', shouldContinueTopic, {
       // If `tools`, then we call the tool node.
-      get_topic: 'MedExpert',
+      get_topic: 'TopicExpert',
       desambiguate: 'Desambiguate',
-      response: 'Response',
+      modelAgent: 'ModelAgent',
       end: END
     })
-    .addEdge('MedExpert', 'GateKeeper')
     .addEdge('Desambiguate', END)
-    .addEdge('Response', END)
+    .addEdge('TopicExpert', 'TopicAgent')
+    .addConditionalEdges('ModelAgent', shouldContinueModel, {
+      execute_model: 'ModelExpert',
+      end: END
+    })
+    .addEdge('ModelExpert', END)
+    .addEdge('ModelAgent', END)
   // Finally, we compile it!
   // This compiles it into a LangChain Runnable,
   // meaning you can use it as you would any other runnable
