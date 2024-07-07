@@ -76,8 +76,9 @@ export async function intelliGraph() {
 
   const get_query_topic = new DynamicStructuredTool({
     name: 'Query_Topic',
-    description: `This task involves identify the right topic for the user query and return the json: {"topic:  "medicine", "sub_topic": "health_technology_assessment"}
-                  .
+    description: `This task involves identify the right topic for the user query and return a json like this: {"topic:  "medicine", "sub_topic": "health_technology_assessment"}.
+    All queries related to anything related to medicine, healthcare, nutrition, nursery, dentistry, psicology, consider them as topic:  medicine, this is very important. 
+    If not, just consider them as topic:  <name of topic non related to medicine>
                   `,
     schema: z.object({
       question: z.string().describe(
@@ -193,7 +194,9 @@ export async function intelliGraph() {
       let prompt = ChatPromptTemplate.fromMessages([
         [
           'system',
-          'You are a AI assistant with the solely mission to identify if a message by human falls into the subject of medicine. All queries related to anything related to medicine, healthcare, nutrition, nursery, dentistry, psicology, consider them as topic:  medicine, this is very important. If not, just consider them as general questions.'
+          `You are a AI assistant with the solely mission to identify if a message by human falls into the subject of medicine. 
+          All queries related to anything related to medicine, healthcare, nutrition, nursery, dentistry, psicology, consider them as topic:  medicine, this is very important. 
+          If not, just consider them as topic:  <name of topic non related to medicine>`
         ],
         new MessagesPlaceholder('messages')
       ])
@@ -249,7 +252,8 @@ export async function intelliGraph() {
     // We use the response to create a ToolMessage
     const toolMessage = new ToolMessage({
       tool_call_id: action.log,
-      content: toolResponse
+      content: toolResponse,
+      additional_kwargs: { args: action.toolInput }
     })
     console.log('toolMessage', toolMessage, '\n')
     // We return a list, because this will get added to the existing list
@@ -309,7 +313,9 @@ export async function intelliGraph() {
   const shouldContinueTopic = async (state: {
     messages: Array<BaseMessage>
   }) => {
-    console.log('Passing through shouldContinue', '\n')
+    console.log(
+      '\n******************** SHouldContinueTopic *******************'
+    )
     // console.log(JSON.stringify(state, null, 2), '\n')
     const { messages } = state
     const lastMessage:
@@ -355,17 +361,19 @@ export async function intelliGraph() {
 
         console.log('json_topic', topic, ' ', sub_topic)
 
-        if (topic === 'medicine' && sub_topic === 'ambiguous') {
-          if (isValidMemory(json_topic)) {
-            console.log('Memory is valid')
-            await saveMemory({ userId: user.id, payload: json_topic })
-          } else console.log('Memory is not valid')
-          return 'desambiguate'
-        } else return 'modelAgent'
+        if (topic === 'medicine') {
+          if (sub_topic === 'ambiguous') {
+            if (isValidMemory(json_topic)) {
+              console.log('Memory is valid')
+              await saveMemory({ userId: user.id, payload: json_topic })
+            } else console.log('Memory is not valid')
+            return 'desambiguate'
+          } else return 'modelAgent'
+        } else return 'respond_back'
       }
     }
 
-    return 'modelAgent'
+    return 'end'
   }
   const getMedicaments = new DynamicStructuredTool({
     name: 'getMedicaments',
@@ -535,6 +543,59 @@ export async function intelliGraph() {
     return 'end'
   }
 
+  const respond = async (state: State, config?: RunnableConfig) => {
+    const { messages } = state
+    const lastMessage:
+      | HumanMessage
+      | AIMessage
+      | FunctionMessage
+      | ToolMessage = messages[messages.length - 1]
+
+    console.log('\n******************** ResponseBack *******************')
+    console.log('Passing through ResponseBack -> respond', lastMessage, '\n')
+
+    try {
+      const model = new ChatOpenAI({
+        model: 'gpt-3.5-turbo',
+        temperature: 0,
+        streaming: false
+      })
+
+      // We return a list, because this will get added to the existing list
+
+      const message_type = baseType(lastMessage)
+      if (
+        message_type === 'FunctionMessage' ||
+        message_type === 'ToolMessage'
+      ) {
+        if (message_type === 'ToolMessage') {
+          const question = lastMessage.additional_kwargs.args
+          const prompt = ChatPromptTemplate.fromMessages([
+            ['system', 'Answer the question'],
+            new MessagesPlaceholder('messages')
+          ])
+          const response = await prompt.pipe(model).invoke({
+            // @ts-ignore
+            messages: [new HumanMessage(question.question)]
+          })
+
+          console.log('response', response)
+          return {
+            messages: [new AIMessage(response)]
+          }
+        }
+      }
+      return {
+        messages: [new AIMessage('Acabado')]
+      }
+    } catch (error) {
+      console.log('erroreor', error)
+      return {
+        messages: []
+      }
+    }
+  }
+
   // Define THE GRAPH
 
   const workflow = new StateGraph({
@@ -546,13 +607,16 @@ export async function intelliGraph() {
     .addNode('ModelAgent', callModel)
     .addNode('ModelExpert', callTool)
     .addNode('Desambiguate', desambiguate)
+    .addNode('ResponseBack', respond)
     .addConditionalEdges('TopicAgent', shouldContinueTopic, {
       // If `tools`, then we call the tool node.
       get_topic: 'TopicExpert',
       desambiguate: 'Desambiguate',
       modelAgent: 'ModelAgent',
+      respond_back: 'ResponseBack',
       end: END
     })
+    .addEdge('ResponseBack', END)
     .addEdge('Desambiguate', END)
     .addEdge('TopicExpert', 'TopicAgent')
     .addConditionalEdges('ModelAgent', shouldContinueModel, {
