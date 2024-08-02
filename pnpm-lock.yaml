@@ -12,8 +12,8 @@ importers:
         specifier: ^0.0.21
         version: 0.0.21(zod@3.23.8)
       '@ai-sdk/mistral':
-        specifier: ^0.0.17
-        version: 0.0.17(zod@3.23.8)
+        specifier: ^0.0.20
+        version: 0.0.20(zod@3.23.8)
       '@ai-sdk/openai':
         specifier: ^0.0.29
         version: 0.0.29(zod@3.23.8)
@@ -28,31 +28,31 @@ importers:
         version: 3.6.0(react-hook-form@7.52.0(react@18.3.1))
       '@langchain/anthropic':
         specifier: ^0.2.1
-        version: 0.2.1(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+        version: 0.2.1(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       '@langchain/community':
-        specifier: ^0.2.11
-        version: 0.2.11(@neondatabase/serverless@0.9.3)(@pinecone-database/pinecone@2.2.2)(@upstash/redis@1.31.5)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(crypto-js@4.2.0)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.51.0(encoding@0.1.13))
+        specifier: ^0.2.17
+        version: 0.2.17(@neondatabase/serverless@0.9.3)(@pinecone-database/pinecone@2.2.2)(@upstash/redis@1.31.5)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(crypto-js@4.2.0)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.51.0(encoding@0.1.13))
       '@langchain/core':
-        specifier: ^0.2.6
-        version: 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+        specifier: ^0.2.14
+        version: 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       '@langchain/google-genai':
         specifier: ^0.0.17
-        version: 0.0.17(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))(zod@3.23.8)
+        version: 0.0.17(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))(zod@3.23.8)
       '@langchain/groq':
         specifier: ^0.0.12
-        version: 0.0.12(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+        version: 0.0.12(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       '@langchain/langgraph':
-        specifier: ^0.0.23
-        version: 0.0.23(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+        specifier: ^0.0.26
+        version: 0.0.26(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       '@langchain/mistralai':
-        specifier: ^0.0.24
-        version: 0.0.24(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+        specifier: ^0.0.25
+        version: 0.0.25(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       '@langchain/openai':
         specifier: ^0.1.3
-        version: 0.1.3(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))
+        version: 0.1.3(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))
       '@langchain/pinecone':
         specifier: ^0.0.7
-        version: 0.0.7(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+        version: 0.0.7(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       '@neondatabase/serverless':
         specifier: ^0.9.3
         version: 0.9.3
@@ -126,8 +126,8 @@ importers:
         specifier: ^11.2.10
         version: 11.2.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       langchain:
-        specifier: ^0.2.5
-        version: 0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13))
+        specifier: ^0.2.8
+        version: 0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13))
       lucide-react:
         specifier: ^0.395.0
         version: 0.395.0(react@18.3.1)
@@ -249,8 +249,8 @@ packages:
     peerDependencies:
       zod: ^3.0.0
 
-  '@ai-sdk/mistral@0.0.17':
-    resolution: {integrity: sha512-MapQtsTI8o4Efb1m42FQHok669kz6O4UxDNnQ7sM1NJIYa7gmnpmzN2kIyygkOlaLIPDPhrvSfKlnr7v98YI5A==}
+  '@ai-sdk/mistral@0.0.20':
+    resolution: {integrity: sha512-PqRGrBIXN+e1Doxi3eyWNX4XFlIKrku5aqb96+fozHWVpk+TIRGhaXRxZm4quDG5QvdpLlk7nUKbOwsjK6XGYg==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.0.0
@@ -270,8 +270,21 @@ packages:
       zod:
         optional: true
 
+  '@ai-sdk/provider-utils@1.0.0':
+    resolution: {integrity: sha512-Akq7MmGQII8xAuoVjJns/n/2BTUrF6qaXIj/3nEuXk/hPSdETlLWRSrjrTmLpte1VIPE5ecNzTALST+6nz47UQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.0.0
+    peerDependenciesMeta:
+      zod:
+        optional: true
+
   '@ai-sdk/provider@0.0.10':
     resolution: {integrity: sha512-NzkrtREQpHID1cTqY/C4CI30PVOaXWKYytDR2EcytmFgnP7Z6+CrGIA/YCnNhYAuUm6Nx+nGpRL/Hmyrv7NYzg==}
+    engines: {node: '>=18'}
+
+  '@ai-sdk/provider@0.0.11':
+    resolution: {integrity: sha512-VTipPQ92Moa5Ovg/nZIc8yNoIFfukZjUHZcQMduJbiUh3CLQyrBAKTEV9AwjPy8wgVxj3+GZjon0yyOJKhfp5g==}
     engines: {node: '>=18'}
 
   '@ai-sdk/react@0.0.2':
@@ -497,8 +510,8 @@ packages:
     resolution: {integrity: sha512-HoN8uHks0dnA8yK6sWO6Oz3N4c5YxLAGhNzxxAD4bIBnmD2ZvQq54Skjxh+m0ANkbjH7yJwRqU3HJyIhOUeLtA==}
     engines: {node: '>=18'}
 
-  '@langchain/community@0.2.11':
-    resolution: {integrity: sha512-QMHvig1L+Qbf50HJSJoumceCBFEyivjt1cDrbMynpVTBdRV0Okp5IXMrfwbZ3WBTdrLMqfLGK3kf6ebPV6AKJQ==}
+  '@langchain/community@0.2.17':
+    resolution: {integrity: sha512-lbmOvOvE0L2EV8lUb/ZcYyrLGF0sveGpYg9A0m6F/nDhuPG1HZqHvU/LiHsCaVO2WJPGowibMPTC02fUG/6dKA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-crypto/sha256-js': ^5.0.0
@@ -519,7 +532,7 @@ packages:
       '@datastax/astra-db-ts': ^1.0.0
       '@elastic/elasticsearch': ^8.4.0
       '@getmetal/metal-sdk': '*'
-      '@getzep/zep-cloud': '*'
+      '@getzep/zep-cloud': ^1.0.6
       '@getzep/zep-js': ^0.9.0
       '@gomomento/sdk': ^1.51.1
       '@gomomento/sdk-core': ^1.51.1
@@ -529,7 +542,7 @@ packages:
       '@huggingface/inference': ^2.6.4
       '@layerup/layerup-security': ^1.5.12
       '@mendable/firecrawl-js': ^0.0.13
-      '@mlc-ai/web-llm': ^0.2.40
+      '@mlc-ai/web-llm': 0.2.46
       '@mozilla/readability': '*'
       '@neondatabase/serverless': '*'
       '@notionhq/client': ^2.2.10
@@ -558,7 +571,7 @@ packages:
       '@writerai/writer-sdk': ^0.40.2
       '@xata.io/client': ^0.28.0
       '@xenova/transformers': ^2.5.4
-      '@zilliz/milvus2-sdk-node': '>=2.2.7'
+      '@zilliz/milvus2-sdk-node': '>=2.3.5'
       apify-client: ^2.7.1
       assemblyai: ^4.0.0
       better-sqlite3: '>=9.4.0 <12.0.0'
@@ -863,8 +876,8 @@ packages:
       youtubei.js:
         optional: true
 
-  '@langchain/core@0.2.6':
-    resolution: {integrity: sha512-YB9F0vdi/PcgBLSKtDwQ3gV6w4xVfk4ph0U43Okz2dAapKfBkVVB0rzr/afYUt/WHs864MuaO8uLN64egSDtIA==}
+  '@langchain/core@0.2.14':
+    resolution: {integrity: sha512-e+dB2Sra+5sY4fPCXrZh4w1fLR68yfX2XSWS97DzHpeJRRnMGbOzjaaks6gy3wPyWhfS1WGLisJCMfCmFvH9fw==}
     engines: {node: '>=18'}
 
   '@langchain/google-genai@0.0.17':
@@ -875,8 +888,8 @@ packages:
     resolution: {integrity: sha512-qgrVBdUnK9Qe8fzMc9gmMPGzc/8swDYbQuHoqsZmeK7M3wxEPR60rKdZvbbkFzqn+1NdquyRTeVKSgihPCib5Q==}
     engines: {node: '>=18'}
 
-  '@langchain/langgraph@0.0.23':
-    resolution: {integrity: sha512-pXlcsBOseT5xdf9enUqbLQ/59LaZxgMI2dL2vFJ+EpcoK7bQnlzzhRtRPp+vubMyMeEKRoAXlaA9ObwpVi93CA==}
+  '@langchain/langgraph@0.0.26':
+    resolution: {integrity: sha512-edfy9C9e5E1/HvWY9Jk4P3kF3RToA7OIVj9aXjCCb/8dvoMcmMsQSB990Uc29H+3lSpxHWrzSaZVQCAxD6XAAg==}
     engines: {node: '>=18'}
     peerDependencies:
       better-sqlite3: ^9.5.0
@@ -884,8 +897,8 @@ packages:
       better-sqlite3:
         optional: true
 
-  '@langchain/mistralai@0.0.24':
-    resolution: {integrity: sha512-rSABqabqA7WyNK3fCPLLwLGGW+Sb1O0MQ0N2e0S+D1VGmqPrZKfPtoS0/JRInUdmDJa7DyOpXQjBiX76EGyA0g==}
+  '@langchain/mistralai@0.0.25':
+    resolution: {integrity: sha512-NeQCim5J9Msye25rqh1x1qFXAGhXsCsjpP1p1LX6RxeuzVTeqet0O5D8fwP7ftfcjdg8k5VZCWrDs4OhGRB2PQ==}
     engines: {node: '>=18'}
 
   '@langchain/openai@0.0.34':
@@ -3096,8 +3109,8 @@ packages:
       youtubei.js:
         optional: true
 
-  langchain@0.2.5:
-    resolution: {integrity: sha512-H5WL0NanCdQ+tzoeEt7Fyz9YGdR3wbfDvfQrJvxAO95istKo5JraRh24dzyvqxM9439xwRMNaMIpMwsyqtWDtQ==}
+  langchain@0.2.8:
+    resolution: {integrity: sha512-kb2IOMA71xH8e6EXFg0l4S+QSMC/c796pj1+7mPBkR91HHwoyHZhFRrBaZv4tV+Td+Ba91J2uEDBmySklZLpNQ==}
     engines: {node: '>=18'}
     peerDependencies:
       '@aws-sdk/client-s3': ^3.310.0
@@ -3144,7 +3157,7 @@ packages:
       redis: ^4.6.4
       sonix-speech-recognition: ^2.1.1
       srt-parser-2: ^1.2.3
-      typeorm: ^0.3.12
+      typeorm: ^0.3.20
       weaviate-ts-client: '*'
       web-auth-library: ^1.0.3
       ws: ^8.14.2
@@ -4827,10 +4840,10 @@ snapshots:
       '@ai-sdk/provider-utils': 0.0.14(zod@3.23.8)
       zod: 3.23.8
 
-  '@ai-sdk/mistral@0.0.17(zod@3.23.8)':
+  '@ai-sdk/mistral@0.0.20(zod@3.23.8)':
     dependencies:
-      '@ai-sdk/provider': 0.0.10
-      '@ai-sdk/provider-utils': 0.0.14(zod@3.23.8)
+      '@ai-sdk/provider': 0.0.11
+      '@ai-sdk/provider-utils': 1.0.0(zod@3.23.8)
       zod: 3.23.8
 
   '@ai-sdk/openai@0.0.29(zod@3.23.8)':
@@ -4848,7 +4861,20 @@ snapshots:
     optionalDependencies:
       zod: 3.23.8
 
+  '@ai-sdk/provider-utils@1.0.0(zod@3.23.8)':
+    dependencies:
+      '@ai-sdk/provider': 0.0.11
+      eventsource-parser: 1.1.2
+      nanoid: 3.3.6
+      secure-json-parse: 2.7.0
+    optionalDependencies:
+      zod: 3.23.8
+
   '@ai-sdk/provider@0.0.10':
+    dependencies:
+      json-schema: 0.4.0
+
+  '@ai-sdk/provider@0.0.11':
     dependencies:
       json-schema: 0.4.0
 
@@ -5107,10 +5133,10 @@ snapshots:
 
   '@jsdevtools/ono@7.1.3': {}
 
-  '@langchain/anthropic@0.2.1(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
+  '@langchain/anthropic@0.2.1(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
     dependencies:
       '@anthropic-ai/sdk': 0.21.1(encoding@0.1.13)
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       fast-xml-parser: 4.4.0
       zod: 3.23.8
       zod-to-json-schema: 3.23.0(zod@3.23.8)
@@ -5119,16 +5145,16 @@ snapshots:
       - langchain
       - openai
 
-  '@langchain/community@0.2.11(@neondatabase/serverless@0.9.3)(@pinecone-database/pinecone@2.2.2)(@upstash/redis@1.31.5)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(crypto-js@4.2.0)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.51.0(encoding@0.1.13))':
+  '@langchain/community@0.2.17(@neondatabase/serverless@0.9.3)(@pinecone-database/pinecone@2.2.2)(@upstash/redis@1.31.5)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(crypto-js@4.2.0)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(lodash@4.17.21)(openai@4.51.0(encoding@0.1.13))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       '@langchain/openai': 0.1.3(encoding@0.1.13)(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))
       binary-extensions: 2.3.0
       expr-eval: 2.0.2
       flat: 5.0.2
       js-yaml: 4.1.0
       langchain: 0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13))
-      langsmith: 0.1.31(@langchain/core@0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      langsmith: 0.1.31(@langchain/core@0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       uuid: 9.0.1
       zod: 3.23.8
       zod-to-json-schema: 3.23.0(zod@3.23.8)
@@ -5152,56 +5178,56 @@ snapshots:
       - peggy
       - pyodide
 
-  '@langchain/core@0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
+  '@langchain/core@0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
     dependencies:
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.12
-      langsmith: 0.1.31(@langchain/core@0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      langsmith: 0.1.31(@langchain/core@0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       ml-distance: 4.0.1
       mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
-      uuid: 9.0.1
+      uuid: 10.0.0
       zod: 3.23.8
       zod-to-json-schema: 3.23.0(zod@3.23.8)
     transitivePeerDependencies:
       - langchain
       - openai
 
-  '@langchain/core@0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
+  '@langchain/core@0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
     dependencies:
       ansi-styles: 5.2.0
       camelcase: 6.3.0
       decamelize: 1.2.0
       js-tiktoken: 1.0.12
-      langsmith: 0.1.31(@langchain/core@0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      langsmith: 0.1.31(@langchain/core@0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       ml-distance: 4.0.1
       mustache: 4.2.0
       p-queue: 6.6.2
       p-retry: 4.6.2
-      uuid: 9.0.1
+      uuid: 10.0.0
       zod: 3.23.8
       zod-to-json-schema: 3.23.0(zod@3.23.8)
     transitivePeerDependencies:
       - langchain
       - openai
 
-  '@langchain/google-genai@0.0.17(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))(zod@3.23.8)':
+  '@langchain/google-genai@0.0.17(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))(zod@3.23.8)':
     dependencies:
       '@google/generative-ai': 0.7.1
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       zod-to-json-schema: 3.23.0(zod@3.23.8)
     transitivePeerDependencies:
       - langchain
       - openai
       - zod
 
-  '@langchain/groq@0.0.12(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
+  '@langchain/groq@0.0.12(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
-      '@langchain/openai': 0.0.34(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/openai': 0.0.34(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))
       groq-sdk: 0.3.3(encoding@0.1.13)
       zod: 3.23.8
       zod-to-json-schema: 3.23.0(zod@3.23.8)
@@ -5210,17 +5236,17 @@ snapshots:
       - langchain
       - openai
 
-  '@langchain/langgraph@0.0.23(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
+  '@langchain/langgraph@0.0.26(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
-      uuid: 9.0.1
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      uuid: 10.0.0
     transitivePeerDependencies:
       - langchain
       - openai
 
-  '@langchain/mistralai@0.0.24(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
+  '@langchain/mistralai@0.0.25(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       '@mistralai/mistralai': 0.4.0(encoding@0.1.13)
       uuid: 9.0.1
       zod: 3.23.8
@@ -5232,7 +5258,7 @@ snapshots:
 
   '@langchain/openai@0.0.34(encoding@0.1.13)(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       js-tiktoken: 1.0.12
       openai: 4.51.0(encoding@0.1.13)
       zod: 3.23.8
@@ -5241,9 +5267,9 @@ snapshots:
       - encoding
       - langchain
 
-  '@langchain/openai@0.0.34(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))':
+  '@langchain/openai@0.0.34(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       js-tiktoken: 1.0.12
       openai: 4.51.0(encoding@0.1.13)
       zod: 3.23.8
@@ -5254,7 +5280,7 @@ snapshots:
 
   '@langchain/openai@0.1.3(encoding@0.1.13)(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       js-tiktoken: 1.0.12
       openai: 4.51.0(encoding@0.1.13)
       zod: 3.23.8
@@ -5263,9 +5289,9 @@ snapshots:
       - encoding
       - langchain
 
-  '@langchain/openai@0.1.3(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))':
+  '@langchain/openai@0.1.3(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       js-tiktoken: 1.0.12
       openai: 4.51.0(encoding@0.1.13)
       zod: 3.23.8
@@ -5274,9 +5300,9 @@ snapshots:
       - encoding
       - langchain
 
-  '@langchain/pinecone@0.0.7(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
+  '@langchain/pinecone@0.0.7(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       '@pinecone-database/pinecone': 2.2.2
       flat: 5.0.2
       uuid: 9.0.1
@@ -5286,15 +5312,15 @@ snapshots:
 
   '@langchain/textsplitters@0.0.3(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       js-tiktoken: 1.0.12
     transitivePeerDependencies:
       - langchain
       - openai
 
-  '@langchain/textsplitters@0.0.3(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
+  '@langchain/textsplitters@0.0.3(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))':
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       js-tiktoken: 1.0.12
     transitivePeerDependencies:
       - langchain
@@ -7816,7 +7842,7 @@ snapshots:
 
   langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)):
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       '@langchain/openai': 0.0.34(encoding@0.1.13)(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))
       '@langchain/textsplitters': 0.0.3(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       binary-extensions: 2.3.0
@@ -7824,7 +7850,7 @@ snapshots:
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
       langchainhub: 0.0.11
-      langsmith: 0.1.31(@langchain/core@0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      langsmith: 0.1.31(@langchain/core@0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       ml-distance: 4.0.1
       openapi-types: 12.1.3
       p-retry: 4.6.2
@@ -7844,17 +7870,17 @@ snapshots:
       - encoding
       - openai
 
-  langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)):
+  langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)):
     dependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
-      '@langchain/openai': 0.1.3(encoding@0.1.13)(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))
-      '@langchain/textsplitters': 0.0.3(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/openai': 0.1.3(encoding@0.1.13)(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))
+      '@langchain/textsplitters': 0.0.3(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       binary-extensions: 2.3.0
       js-tiktoken: 1.0.12
       js-yaml: 4.1.0
       jsonpointer: 5.0.1
       langchainhub: 0.0.11
-      langsmith: 0.1.31(@langchain/core@0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      langsmith: 0.1.31(@langchain/core@0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       ml-distance: 4.0.1
       openapi-types: 12.1.3
       p-retry: 4.6.2
@@ -7876,7 +7902,7 @@ snapshots:
 
   langchainhub@0.0.11: {}
 
-  langsmith@0.1.31(@langchain/core@0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)):
+  langsmith@0.1.31(@langchain/core@0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)):
     dependencies:
       '@types/uuid': 9.0.8
       commander: 10.0.1
@@ -7884,11 +7910,11 @@ snapshots:
       p-retry: 4.6.2
       uuid: 9.0.1
     optionalDependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
       langchain: 0.2.3(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13))
       openai: 4.51.0(encoding@0.1.13)
 
-  langsmith@0.1.31(@langchain/core@0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)):
+  langsmith@0.1.31(@langchain/core@0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)))(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13)):
     dependencies:
       '@types/uuid': 9.0.8
       commander: 10.0.1
@@ -7896,8 +7922,8 @@ snapshots:
       p-retry: 4.6.2
       uuid: 9.0.1
     optionalDependencies:
-      '@langchain/core': 0.2.6(langchain@0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
-      langchain: 0.2.5(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13))
+      '@langchain/core': 0.2.14(langchain@0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13)))(openai@4.51.0(encoding@0.1.13))
+      langchain: 0.2.8(@pinecone-database/pinecone@2.2.2)(@vercel/kv@2.0.0)(axios@1.7.2)(cheerio@1.0.0-rc.12)(encoding@0.1.13)(fast-xml-parser@4.4.0)(html-to-text@9.0.5)(ignore@5.3.1)(openai@4.51.0(encoding@0.1.13))
       openai: 4.51.0(encoding@0.1.13)
 
   language-subtag-registry@0.3.23: {}

@@ -32,6 +32,7 @@ import {
 } from '../actions/kv_memory'
 import { m } from 'framer-motion'
 import { remove } from 'cheerio/lib/api/manipulation'
+import { model_json } from './model-json'
 
 export async function intelliGraph() {
   // Contemplate Google Provider, which doesn't have an id
@@ -87,7 +88,11 @@ export async function intelliGraph() {
       )
     }),
     func: async ({ question }) => {
-      const result = await topicfier.invoke({ inputText: question })
+      const runnable = model_json({ modelName: 'mistral-large' })
+      const result = await runnable.invoke({
+        input: question
+      })
+
       return JSON.stringify(result) || '' // Ensure a string value is always returned, even if it is undefined
     }
   })
@@ -129,16 +134,21 @@ export async function intelliGraph() {
     return 'Unknown' as const
   }
   function get_json_topic(lastMessage: any) {
-    const parsed = lastMessage as ToolMessage
-    const content = parsed.content
-    // @ts-ignore
-    const x = JSON.parse(content)
-    const argus = x.kwargs.additional_kwargs.function_call.arguments
+    const parsed = lastMessage as AIMessage
+    const content = parsed.lc_kwargs.content
+    console.log('content', content)
 
-    const json_topic = topic_schema.parse(JSON.parse(argus))
+    const json_topic = topic_schema.parse(content)
     return json_topic
   }
-
+  function getMostRecentHumanMessageContent(messages: BaseMessage[]): any {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i] instanceof HumanMessage) {
+        return messages[i].content
+      }
+    }
+    return undefined
+  }
   // Define the function to execute tools
   const _getAction = (state: { messages: Array<BaseMessage> }): AgentAction => {
     const { messages } = state
@@ -208,24 +218,18 @@ export async function intelliGraph() {
         messages.push(new_system_message)
       }
 
-      const model = new ChatOpenAI({
-        model: 'gpt-3.5-turbo',
-        temperature: 0,
-        streaming: false
+      //const response = await prompt.pipe(newModel).invoke({ messages })
+
+      const runnable = model_json({ modelName: 'gpt-4o' })
+      const response = await runnable.invoke({
+        input: lastMessage.content
       })
+      console.log('\n ************************* response *********************')
 
-      const tools = [get_query_topic] as Array<StructuredTool>
-
-      const newModel = model.bindTools(tools, {
-        tool_choice: { type: 'function', function: { name: 'Query_Topic' } }
-      })
-
-      const response = await prompt.pipe(newModel).invoke({ messages })
-
-      //console.log('response', response)
+      console.log('response', response)
       // We return a list, because this will get added to the existing list
       return {
-        messages: [response]
+        messages: [new AIMessage({ content: response })]
       }
     } else {
       return {
@@ -338,42 +342,20 @@ export async function intelliGraph() {
       message_type
     )
 
-    // If there is no function call, then we finish
+    const json_topic = get_json_topic(lastMessage)
+    const { topic, sub_topic } = json_topic
 
-    if (message_type === 'AIMessage' || message_type === 'AIMessageChunk') {
-      if (
-        lastMessage.additional_kwargs.tool_calls ||
-        lastMessage.lc_kwargs.tool_calls
-      ) {
-        console.log('tools_call 1', lastMessage.additional_kwargs.tool_calls)
-        console.log('tools_call 2', lastMessage.lc_kwargs.tool_calls)
+    console.log('json_topic', topic, ' ', sub_topic)
 
-        return 'get_topic'
+    if (topic === 'medicine') {
+      if (sub_topic === 'ambiguous') {
+        if (isValidMemory(json_topic)) {
+          console.log('Memory is valid')
+          await saveMemory({ userId: user.id, payload: json_topic })
+        } else console.log('Memory is not valid')
+        return 'desambiguate'
       } else return 'modelAgent'
-    }
-
-    if (message_type === 'FunctionMessage' || message_type === 'ToolMessage') {
-      if (message_type === 'ToolMessage') {
-        console.log('ENTERING TOOL MESSAGE')
-
-        const json_topic = get_json_topic(lastMessage)
-        const { topic, sub_topic } = json_topic
-
-        console.log('json_topic', topic, ' ', sub_topic)
-
-        if (topic === 'medicine') {
-          if (sub_topic === 'ambiguous') {
-            if (isValidMemory(json_topic)) {
-              console.log('Memory is valid')
-              await saveMemory({ userId: user.id, payload: json_topic })
-            } else console.log('Memory is not valid')
-            return 'desambiguate'
-          } else return 'modelAgent'
-        } else return 'respond_back'
-      }
-    }
-
-    return 'end'
+    } else return 'respond_back'
   }
   const getMedicaments = new DynamicStructuredTool({
     name: 'getMedicaments',
@@ -453,8 +435,11 @@ export async function intelliGraph() {
       tool_choice: { type: 'function', function: { name: chosen_tool } }
     })
 
+    const input = getMostRecentHumanMessageContent(messages)
+    console.log('input', input)
+
     try {
-      const response = await prompt.pipe(llm).invoke({ messages })
+      const response = await prompt.pipe(llm).invoke({ messages: [input] })
 
       console.log('response', response)
 
@@ -623,7 +608,7 @@ export async function intelliGraph() {
       execute_model: 'ModelExpert',
       end: END
     })
-    .addEdge('ModelExpert', END)
+    .addEdge('ModelExpert', 'ResponseBack')
     .addEdge('ModelAgent', END)
   // Finally, we compile it!
   // This compiles it into a LangChain Runnable,
