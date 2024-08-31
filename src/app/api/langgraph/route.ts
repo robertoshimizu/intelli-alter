@@ -11,106 +11,11 @@ import {
   AIMessage,
   SystemMessage
 } from '@langchain/core/messages'
-import { ChatGenerationChunk } from '@langchain/core/outputs'
-
-import { IterableReadableStream } from '@langchain/core/utils/stream'
-import { StreamEvent } from '@langchain/core/dist/tracers/event_stream'
 import { toAIStream } from '@/lib/adapter/langgraph-adapter'
 import { intelliGraph } from '@/lib/models/intelli-graph'
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge'
-
-function customParser(): AIStreamParser {
-  return (data: string, options: AIStreamParserOptions) => {
-    let event: StreamEvent
-    try {
-      event = JSON.parse(data)
-    } catch (error) {
-      console.error('Error parsing data:', error)
-      return
-    }
-
-    switch (event.event) {
-      case 'on_llm_start':
-        console.log('*****************************************')
-        console.log('On LLM Start')
-        return
-
-      case 'on_llm_stream':
-        const chunk: ChatGenerationChunk = event.data?.chunk
-        if (!chunk) {
-          console.error('Chunk is undefined or null:', event.data)
-          return
-        }
-        // @ts-ignore
-        const msg = chunk.message.kwargs as any
-
-        if (msg.tool_call_chunks && msg.tool_call_chunks.length > 0) {
-          console.log('******************* TOOLs **********************')
-          console.log('Tool call chunks:', msg.tool_call_chunks)
-        } else {
-          const messageContent = msg.content
-          if (messageContent) {
-            return { isText: false, content: messageContent }
-          }
-        }
-        return
-
-      case 'on_llm_end':
-        console.log('*****************************************')
-        console.log('On LLM End', event.data.output.generations[0][0].text)
-        return
-
-      default:
-        return
-    }
-  }
-}
-
-function FetchStream(
-  stream: IterableReadableStream<StreamEvent>,
-  cb?: AIStreamCallbacksAndOptions
-): ReadableStream<Uint8Array> {
-  const parser = customParser()
-
-  return new ReadableStream<Uint8Array>({
-    async start(controller) {
-      await cb?.onStart?.()
-      console.log('Stream started')
-
-      let final = ''
-
-      for await (const event of stream) {
-        const parsed = parser(JSON.stringify(event), { event: event.event })
-        if (parsed && typeof parsed !== 'string' && !parsed.isText) {
-          let output = parsed.content
-          const encoder = new TextEncoder()
-
-          console.log('Output:', output)
-          output = output.replace(/"/g, '\\"')
-
-          // Format each chunk properly
-          const formattedOutput = `0:"${output}"\n`
-
-          console.log('Formatted Output:', formattedOutput)
-          const encodedOutput = encoder.encode(formattedOutput)
-          controller.enqueue(encodedOutput)
-
-          await cb?.onCompletion?.(output)
-          await cb?.onToken?.(output)
-          final = output
-        }
-      }
-
-      controller.close()
-      await cb?.onFinal?.(final)
-    },
-    cancel() {
-      cb?.onFinal?.('final')
-    }
-  })
-}
 
 export interface Message {
   role: 'user' | 'assistant'
@@ -139,8 +44,8 @@ export async function POST(req: Request) {
     )
   }
 
-  //const app = await stateGraph()
-  const app = await intelliGraph()
+  const app = await stateGraph()
+  //const app = await intelliGraph()
 
   const inputs = {
     messages: inputMessages
@@ -157,10 +62,10 @@ export async function POST(req: Request) {
   try {
     const aiStream = toAIStream(graph, {
       onStart: async () => {
-        //console.log('Stream Initializad...')
+        console.log('Stream Initializad...')
       },
       onCompletion: async (completion) => {
-        //console.log('Completion going:', completion)
+        console.log('Completion going:', completion)
       },
       onFinal: async (completion) => {
         console.log('Stream COMPLTETED', completion)
@@ -174,6 +79,7 @@ export async function POST(req: Request) {
     })
 
     return new StreamingTextResponse(aiStream, {})
+    //return LangChainAdapter.toDataStreamResponse(aiStream)
   } catch (error) {
     console.error('Error Streaming:', error)
     return new Response('Error', { status: 501 })
