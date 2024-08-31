@@ -1,6 +1,3 @@
-// Inspired by Chatbot-UI and modified to fit the needs of this project
-// @see https://github.com/mckaywrigley/chatbot-ui/blob/main/components/Chat/ChatMessage.tsx
-
 import { Message } from 'ai'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
@@ -22,8 +19,6 @@ export function ChatMessage({
   isLoading,
   ...props
 }: ChatMessageProps) {
-  //console.log('isLoading: ', isLoading)
-
   return (
     <div
       className={cn('group relative mb-4 flex items-start md:-ml-12')}
@@ -40,10 +35,10 @@ export function ChatMessage({
         {message.role === 'user' ? <IconUser /> : <IconIntelliDoctor />}
       </div>
       <div className="flex flex-col">
-        <div className="ml-2  font-semibold">
+        <div className="ml-2 font-semibold">
           {message.role === 'user' ? 'Você' : 'IntelliDoctor'}
         </div>
-        {isLoading && <div>pesquisando base de dados ... aguarde</div>}
+
         <div className="ml-1 flex-1 space-y-2 overflow-hidden px-1">
           <MemoizedReactMarkdown
             className={cn(
@@ -54,9 +49,19 @@ export function ChatMessage({
               p({ children }) {
                 return <p className="mb-2 last:mb-0">{children}</p>
               },
-              code({ node, inline, className, children, ...props }) {
-                if (children.length) {
-                  if (children[0] == '▍') {
+              code({
+                inline,
+                className,
+                children,
+                ...props
+              }: {
+                inline?: boolean
+                className?: string
+                children?: React.ReactNode
+                props?: any
+              }) {
+                if (Array.isArray(children) && children.length) {
+                  if (children[0] === '▍') {
                     return (
                       <span className="mt-1 animate-pulse cursor-default">
                         ▍

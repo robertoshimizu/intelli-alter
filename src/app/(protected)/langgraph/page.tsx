@@ -35,20 +35,8 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col w-full max-w-xl py-14 mx-auto stretch">
-      <h1 className="my-4 text-2xl font-semibold">Langgraph</h1>
+      <h1 className="my-4 text-2xl font-semibold">Langgraphe</h1>
       {/* Model selection dropdown */}
-      <div className="mb-4">
-        <select
-          value={model}
-          onChange={handleModelChange}
-          className="p-2 border border-gray-300 rounded"
-        >
-          <option value="mistral">Mistral</option>
-          <option value="openai">OpenAI</option>
-          <option value="gemini">Gemini</option>
-          <option value="anthropic">Anthropic</option>
-        </select>
-      </div>
 
       {messages.map((message, index) => (
         <div key={index}>
@@ -63,7 +51,7 @@ export default function ChatPage() {
         <input
           className="fixed bottom-0 w-full max-w-xl p-2 mb-8 border border-gray-300 rounded shadow-xl "
           value={input}
-          placeholder="Say something..."
+          placeholder="diga algo ..."
           onChange={handleInputChange}
         />
       </form>
