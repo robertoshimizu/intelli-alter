@@ -30,8 +30,6 @@ import {
   removeMemory,
   saveMemory
 } from '../actions/kv_memory'
-import { m } from 'framer-motion'
-import { remove } from 'cheerio/lib/api/manipulation'
 import { model_json } from './model-json'
 
 export async function intelliGraph() {
@@ -220,7 +218,7 @@ export async function intelliGraph() {
 
       //const response = await prompt.pipe(newModel).invoke({ messages })
 
-      const runnable = model_json({ modelName: 'gpt-4o' })
+      const runnable = model_json({ modelName: 'gpt-4o-mini' })
       const response = await runnable.invoke({
         input: lastMessage.content
       })

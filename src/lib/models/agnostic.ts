@@ -55,6 +55,12 @@ export const chatModel = (modelType: string) => {
         apiKey: process.env.OPENAI_API_KEY,
         modelName: 'gpt-4o' // context window 128k
       })
+    case 'gpt-4o-mini':
+      return new ChatOpenAI({
+        temperature: 0.0,
+        apiKey: process.env.OPENAI_API_KEY,
+        modelName: 'gpt-4o-mini' // context window 128k
+      })
     case 'mistral-large':
       return new ChatMistralAI({
         temperature: 0.0,
