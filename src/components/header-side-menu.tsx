@@ -9,7 +9,6 @@ export function SideMenu() {
         {/* <ChatHistory userId={session.user.id} /> */}
         <ChatHistory userId={'user_2gWi8ToJSPBRRQmbzjL61JkSLct'} />
       </SidebarMobile>
-      <SidebarToggle />
     </>
   )
 }

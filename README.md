@@ -1,36 +1,18 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+#### Pricing
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| Provider  | Model          | Context Window | Input Cost ($/MTok)             | Output Cost ($/MTok)             |
+| --------- | -------------- | -------------- | ------------------------------- | -------------------------------- |
+| Anthropic | Haiku          | 200k           | $0.25                           | $1.25                            |
+| Anthropic | Sonnet 3.5     | 200k           | $3.00                           | $15.00                           |
+| Anthropic | Opus           | 200k           | $15.00                          | $75.00                           |
+| Google    | Gemini-Pro 1.5 | 1,048k         | $3.50 (up to 128K tokens)       | $10.50 (up to 128K tokens)       |
+|           |                |                | $7.00 (longer than 128K tokens) | $21.00 (longer than 128K tokens) |
+| OpenAI    | gpt-4o         | 128K           | $5.00                           | $15.00                           |
+| OpenAI    | gpt-4-turbo    | 128K           | $10.00                          | $30.00                           |
+| OpenAI    | gpt-3.5-turbo  | 16K            | $0.50                           | $1.50                            |
+| Mistral   | mistral-large  | 32K            | $4.00                           | $12.00                           |
+| Mistral   | mixtral-small  | 32K            | $1.00                           | $3.00                            |
+| Mistral   | mixtral-medium | 32K            | $2.70                           | $8.10                            |
+| Mistral   | mixtral 8x22B  | 64K            | $2.00                           | $6.00                            |
+| Mistral   | mixtral 8x7B   | 32K            | $0.70                           | $0.70                            |
+| Meta      | llama 3 70B    | 8K             | $0.59                           | $0.79                            |

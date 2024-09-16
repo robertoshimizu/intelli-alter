@@ -1,9 +1,10 @@
-import { ChatOpenAI } from '@langchain/openai'
 import { ChatAnthropic } from '@langchain/anthropic'
 import { ChatGroq } from '@langchain/groq'
+import { ChatOpenAI } from '@langchain/openai'
 import { ChatMistralAI } from '@langchain/mistralai'
+import { StringOutputParser } from '@langchain/core/output_parsers'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
-import { LanguageModelLike } from '@langchain/core/language_models/base'
 
 /**
  * Returns the chat model based on the model type
@@ -54,6 +55,12 @@ export const chatModel = (modelType: string) => {
         apiKey: process.env.OPENAI_API_KEY,
         modelName: 'gpt-4o' // context window 128k
       })
+    case 'gpt-4o-mini':
+      return new ChatOpenAI({
+        temperature: 0.0,
+        apiKey: process.env.OPENAI_API_KEY,
+        modelName: 'gpt-4o-mini' // context window 128k
+      })
     case 'mistral-large':
       return new ChatMistralAI({
         temperature: 0.0,
@@ -82,3 +89,26 @@ export const chatModel = (modelType: string) => {
       throw new Error(`Unsupported model type: ${modelType}`)
   }
 }
+
+async function main() {
+  const modelType = 'mistral' // 'claude' or 'groq' or 'openai'
+  const prompt = ChatPromptTemplate.fromMessages([
+    ['system', 'You are a world class technical documentation writer.'],
+    ['user', '{input}']
+  ])
+  const outputParser = new StringOutputParser()
+  // @ts-ignore
+  const llmChain = prompt.pipe(chatModel(modelType)).pipe(outputParser)
+
+  const answer = await llmChain.stream({
+    input: 'what is quantum physics?'
+  })
+
+  for await (const item of answer) {
+    console.log('stream item:', item)
+  }
+
+  //console.log(answer)
+}
+// npx ts-node src/models/agnostic.ts
+//void main()
