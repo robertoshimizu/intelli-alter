@@ -1,4 +1,5 @@
 import { StreamEvent } from '@langchain/core/dist/tracers/event_stream'
+import { AIMessageChunk } from '@langchain/core/messages'
 import { ChatGenerationChunk } from '@langchain/core/outputs'
 import {
   AIStreamCallbacksAndOptions,
@@ -55,11 +56,25 @@ export function toAIStream(
       new TransformStream<StreamEvent | any>({
         transform: async (event, controller) => {
           const event_type = event.event
-          //console.log('event_type: ', event_type)
-          if (event_type === 'on_llm_stream') {
-            const chunk: ChatGenerationChunk = event.data?.chunk
+          const tags = event.tags
+          const chunkData = event.data
 
-            controller.enqueue(chunk.text)
+          // Check if event.data has a 'chunk' property
+          const chunk: AIMessageChunk = chunkData.chunk || chunkData
+          if (!chunk) {
+            console.warn('No chunk found in event data')
+            return
+          }
+
+          if (event_type === 'on_chat_model_stream') {
+            console.log('Chunk:', chunk, '|')
+
+            if (chunk.content) {
+              console.log('Chunk content:', chunk.content, '|')
+              controller.enqueue(chunk.content)
+            } else {
+              console.log('Chunk content is undefined')
+            }
           }
         }
       })

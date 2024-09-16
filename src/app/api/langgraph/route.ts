@@ -1,4 +1,4 @@
-import { StreamingTextResponse } from 'ai'
+import { LangChainAdapter, StreamingTextResponse } from 'ai'
 import { stateGraph } from '@/lib/models/state-graph'
 import {
   HumanMessage,
@@ -6,7 +6,7 @@ import {
   SystemMessage
 } from '@langchain/core/messages'
 import { toAIStream } from '@/lib/adapter/langgraph-adapter'
-import { intelliGraph } from '@/lib/models/intelli-graph'
+import { app } from './state-graph-new'
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge'
@@ -38,9 +38,6 @@ export async function POST(req: Request) {
     )
   }
 
-  const app = await stateGraph()
-  //const app = await intelliGraph()
-
   const inputs = {
     messages: inputMessages
   }
@@ -50,7 +47,7 @@ export async function POST(req: Request) {
   const graph = await app.streamEvents(inputs, {
     ...config,
     streamMode: 'values',
-    version: 'v1'
+    version: 'v2' as const
   })
 
   try {
@@ -65,10 +62,10 @@ export async function POST(req: Request) {
         console.log('Stream COMPLTETED', completion)
       },
       onToken: async (token) => {
-        //console.log('Token received', token)
+        console.log('Token received', token)
       },
       onText: async (text) => {
-        //console.log('Text received', text)
+        console.log('Text received', text)
       }
     })
 
