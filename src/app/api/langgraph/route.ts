@@ -21,6 +21,8 @@ export interface Message {
 export async function POST(req: Request) {
   const prompt = await req.json() // Assuming modelType is provided in the request
 
+  console.log('\n Messages received from frontend:\n', prompt)
+
   const { messages, data } = prompt
 
   const inputMessages = messages.map((message: Message) => {
@@ -56,16 +58,16 @@ export async function POST(req: Request) {
         console.log('Stream Initializad...')
       },
       onCompletion: async (completion) => {
-        console.log('Completion going:', completion)
+        //console.log('Completion going:', completion)
       },
       onFinal: async (completion) => {
-        console.log('Stream COMPLTETED', completion)
+        console.log('Stream COMPLTETED...')
       },
       onToken: async (token) => {
-        console.log('Token received', token)
+        //console.log('Token received', token)
       },
       onText: async (text) => {
-        console.log('Text received', text)
+        //console.log('Text received', text)
       }
     })
 

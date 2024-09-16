@@ -67,13 +67,13 @@ export function toAIStream(
           }
 
           if (event_type === 'on_chat_model_stream') {
-            console.log('Chunk:', chunk, '|')
+            //console.log('Chunk:', chunk, '|')
 
             if (chunk.content) {
-              console.log('Chunk content:', chunk.content, '|')
+              //console.log('Chunk content:', chunk.content, '|')
               controller.enqueue(chunk.content)
             } else {
-              console.log('Chunk content is undefined')
+              //console.log('Chunk content is undefined')
             }
           }
         }

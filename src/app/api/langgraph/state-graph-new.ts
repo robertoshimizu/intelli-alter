@@ -57,7 +57,7 @@ const shouldContinue = (state: AgentState) => {
 
   const lastMessage = messages[messages.length - 1]
 
-  console.log('\n ShouldContinue lastMessage:', lastMessage)
+  //console.log('\n ShouldContinue lastMessage:', lastMessage)
 
   // If there is a function call, we continue to tools
   if (
@@ -84,7 +84,7 @@ async function callModel(state: AgentState) {
 
   const lastMessage = messages[messages.length - 1]
 
-  console.log('\n CallModel lastMessage:', lastMessage)
+  //console.log('\n CallModel lastMessage:', lastMessage)
 
   const response = await model.invoke([
     {
@@ -94,7 +94,7 @@ async function callModel(state: AgentState) {
     ...state.messages
   ])
 
-  console.log('\n CallModel response:', response)
+  //console.log('\n CallModel response:', response)
 
   // Return the updated messages
   return { messages: response }
