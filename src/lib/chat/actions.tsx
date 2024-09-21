@@ -109,6 +109,8 @@ async function confirmPurchase(symbol: string, price: number, amount: number) {
 async function submitUserMessage(content: string) {
   'use server'
 
+  console.log('\nsubmitting UserMessage...', content)
+
   const aiState = getMutableAIState<typeof AI>()
 
   aiState.update({
@@ -152,7 +154,10 @@ async function submitUserMessage(content: string) {
       }))
     ],
     text: ({ content, done, delta }) => {
+      //console.log('\nText...\n', content, '\n', done, '\n', delta)
+
       if (!textStream) {
+        console.log('\ntextStream\n', textStream)
         textStream = createStreamableValue('')
         textNode = <BotMessage content={textStream.value} />
       }
@@ -548,6 +553,7 @@ export const AI = createAI<AIState, UIState>({
 })
 
 export const getUIStateFromAIState = (aiState: Chat) => {
+  console.log('\ngetUIStateFromAIState\n', aiState)
   return aiState.messages
     .filter((message) => message.role !== 'system')
     .map((message, index) => ({

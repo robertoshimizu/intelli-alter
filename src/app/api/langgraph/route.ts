@@ -46,11 +46,14 @@ export async function POST(req: Request) {
 
   let config = { configurable: { thread_id: 'conversation-num-1' } }
 
+  // streamEvents is a langgraph method that takes the inputs and config
   const graph = await app.streamEvents(inputs, {
     ...config,
     streamMode: 'values',
     version: 'v2' as const
   })
+
+  // Here I make the bridge from Langgraph to Vercel AI SDK Core
 
   try {
     const aiStream = toAIStream(graph, {

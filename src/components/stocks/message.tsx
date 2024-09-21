@@ -32,6 +32,7 @@ export function BotMessage({
   content: string | StreamableValue<string>
   className?: string
 }) {
+  console.log('BotMessage')
   const text = useStreamableText(content)
 
   return (
@@ -93,6 +94,7 @@ export function BotCard({
   children: React.ReactNode
   showAvatar?: boolean
 }) {
+  console.log('BotCard')
   return (
     <div className="group relative flex items-start md:-ml-12">
       <div
@@ -109,6 +111,7 @@ export function BotCard({
 }
 
 export function SystemMessage({ children }: { children: React.ReactNode }) {
+  console.log('SystemMessage')
   return (
     <div
       className={
@@ -121,6 +124,7 @@ export function SystemMessage({ children }: { children: React.ReactNode }) {
 }
 
 export function SpinnerMessage() {
+  console.log('SpinnerMessage')
   return (
     <div className="group relative flex items-start md:-ml-12">
       <div className="flex size-[24px] shrink-0 select-none items-center justify-center rounded-md border bg-primary text-primary-foreground shadow-sm">
