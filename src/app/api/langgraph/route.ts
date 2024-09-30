@@ -1,4 +1,4 @@
-import { LangChainAdapter, StreamingTextResponse } from 'ai'
+import { LangChainAdapter, StreamingTextResponse, streamText } from 'ai'
 import { stateGraph } from '@/lib/models/state-graph'
 import {
   HumanMessage,
@@ -7,6 +7,7 @@ import {
 } from '@langchain/core/messages'
 import { toAIStream } from '@/lib/adapter/langgraph-adapter'
 import { app } from './state-graph-new'
+import { openai } from '@ai-sdk/openai'
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge'
@@ -54,6 +55,7 @@ export async function POST(req: Request) {
   })
 
   // Here I make the bridge from Langgraph to Vercel AI SDK Core
+  // to AIStream is customized to work with Langgraph
 
   try {
     const aiStream = toAIStream(graph, {
@@ -75,7 +77,7 @@ export async function POST(req: Request) {
     })
 
     return new StreamingTextResponse(aiStream, {})
-    //return LangChainAdapter.toDataStreamResponse(aiStream)
+    //return LangChainAdapter.toDataStreamResponse(aiStream) // does not work with langgraph
   } catch (error) {
     console.error('Error Streaming:', error)
     return new Response('Error', { status: 501 })
