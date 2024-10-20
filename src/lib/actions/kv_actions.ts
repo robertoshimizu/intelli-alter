@@ -29,7 +29,13 @@ export async function getChats(userId?: string | null) {
     return []
   }
 }
-
+/**
+ * Get chat/messages by id from KV database
+ * @param {string} id - Chat id
+ * @param {string} userId - User id
+ * @returns {Chat | null} - Chat object or null
+ *
+ */
 export async function getChat(id: string, userId: string) {
   const chat = await kv.hgetall<Chat>(`chat:${id}`)
 
@@ -147,7 +153,11 @@ export async function saveChat(chat: Chat) {
 export async function refreshHistory(path: string) {
   redirect(path)
 }
-
+/**
+ *
+ * Get OpenAI API key from environment variables
+ * @returns {string[]} - List of missing environment variables
+ */
 export async function getMissingKeys() {
   const keysRequired = ['OPENAI_API_KEY']
   return keysRequired
