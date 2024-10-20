@@ -35,7 +35,7 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col w-full max-w-xl py-14 mx-auto stretch">
-      <h1 className="my-4 text-2xl font-semibold">Langgraphe</h1>
+      <h1 className="my-4 text-2xl font-semibold">Langgraph stream</h1>
       {/* Model selection dropdown */}
 
       {messages.map((message, index) => (

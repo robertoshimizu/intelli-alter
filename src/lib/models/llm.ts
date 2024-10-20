@@ -6,7 +6,7 @@ export function llm_model(modelType: string) {
   // Dynamically selecting the model based on modelType
   let model
   switch (modelType) {
-    case 'mistral':
+    case 'mistral-large':
       // Create instances of models
       const mistralInstance = createMistral({
         // custom settings
@@ -15,7 +15,7 @@ export function llm_model(modelType: string) {
         safePrompt: true // optional safety prompt injection
       })
       break
-    case 'openai':
+    case 'gpt-3.5-turbo':
       model = openai.chat('gpt-3.5-turbo', {
         logitBias: {
           // optional likelihood for specific tokens
@@ -23,6 +23,12 @@ export function llm_model(modelType: string) {
         },
         user: 'test-user' // optional unique user identifier
       })
+      break
+    case 'gpt-4o-mini':
+      model = openai.chat('gpt-4o-mini')
+      break
+    case 'o1-preview':
+      model = openai.chat('o1-preview')
       break
     case 'gemini':
       const google = createGoogleGenerativeAI()
