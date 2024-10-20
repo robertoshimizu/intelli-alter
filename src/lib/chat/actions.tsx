@@ -35,6 +35,7 @@ import { saveChat } from '@/lib/actions/kv_actions'
 import { SpinnerMessage, UserMessage } from '@/components/stocks/message'
 import { Chat, Message } from '@/lib/types'
 import { auth, currentUser } from '@clerk/nextjs/server'
+import { llm_model } from '../models/llm'
 
 async function confirmPurchase(symbol: string, price: number, amount: number) {
   'use server'
@@ -113,6 +114,8 @@ async function submitUserMessage(content: string) {
 
   const aiState = getMutableAIState<typeof AI>()
 
+  // update aiState with user message recently submitted
+
   aiState.update({
     ...aiState.get(),
     messages: [
@@ -128,8 +131,12 @@ async function submitUserMessage(content: string) {
   let textStream: undefined | ReturnType<typeof createStreamableValue<string>>
   let textNode: undefined | React.ReactNode
 
+  const model = llm_model('gpt-4o-mini')
+
+  console.log('\nmodel\n', model)
+
   const result = await streamUI({
-    model: openai('gpt-3.5-turbo'),
+    model,
     initial: <SpinnerMessage />,
     system: `\
     You are a stock trading conversation bot and you can help users buy stocks, step by step.
