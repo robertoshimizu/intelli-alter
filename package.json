@@ -52,7 +52,7 @@
     "langchain": "^0.3.2",
     "lucide-react": "^0.441.0",
     "nanoid": "^5.0.7",
-    "next": "14.2.11",
+    "next": "14.2.15",
     "next-swagger-doc": "^0.4.0",
     "next-themes": "^0.3.0",
     "openai": "^4.61.0",
