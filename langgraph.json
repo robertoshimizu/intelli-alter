@@ -1,0 +1,8 @@
+{
+  "dockerfile_lines": [],
+  "graphs": {
+    "simple_agent": "./src/app/api/langgraph/state-graph-new.ts:app"
+  },
+  "env": ".env",
+  "node_version": "20"
+}

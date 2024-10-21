@@ -1,5 +1,5 @@
 import { LangChainAdapter, StreamingTextResponse, streamText } from 'ai'
-import { stateGraph } from '@/lib/models/state-graph'
+
 import {
   HumanMessage,
   AIMessage,
@@ -7,7 +7,6 @@ import {
 } from '@langchain/core/messages'
 import { toAIStream } from '@/lib/adapter/langgraph-adapter'
 import { app } from './state-graph-new'
-import { openai } from '@ai-sdk/openai'
 
 // Set the runtime to edge for best performance
 export const runtime = 'edge'
