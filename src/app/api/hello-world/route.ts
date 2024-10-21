@@ -15,7 +15,7 @@ import { NextRequest, NextResponse } from 'next/server'
  *            description: Internal Server Error
  */
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     console.log('Hello, world!')
     return NextResponse.json(

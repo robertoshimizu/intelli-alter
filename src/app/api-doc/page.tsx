@@ -1,10 +1,10 @@
-import { getApiDocs } from '../../../lib/swagger'
 import ReactSwagger from './react-swagger'
 export default async function ApiDocPage() {
-  const spec = await getApiDocs()
+  // Working making the swagger.json file manually
+  // the library is not working as expected
   return (
     <section className="container">
-      <ReactSwagger spec={spec} url="/swagger.json" />
+      <ReactSwagger url="/swagger.json" />
     </section>
   )
 }
