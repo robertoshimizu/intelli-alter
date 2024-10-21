@@ -2,8 +2,6 @@ import { ChatOpenAI } from '@langchain/openai'
 import { ChatAnthropic } from '@langchain/anthropic'
 import { ChatGroq } from '@langchain/groq'
 import { ChatMistralAI } from '@langchain/mistralai'
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
-import { LanguageModelLike } from '@langchain/core/language_models/base'
 
 /**
  * Returns the chat model based on the model type
@@ -54,6 +52,12 @@ export const chatModel = (modelType: string) => {
         apiKey: process.env.OPENAI_API_KEY,
         modelName: 'gpt-4o' // context window 128k
       })
+    case 'gpt-4o-mini':
+      return new ChatOpenAI({
+        temperature: 0.0,
+        apiKey: process.env.OPENAI_API_KEY,
+        modelName: 'gpt-4o-mini' // context window 128k
+      })
     case 'mistral-large':
       return new ChatMistralAI({
         temperature: 0.0,
@@ -72,12 +76,7 @@ export const chatModel = (modelType: string) => {
         apiKey: process.env.MISTRALAI_API_KEY,
         model: 'open-mixtral-8x22b' // context window 64k
       })
-    case 'gemini-1.5-pro-latest':
-      return new ChatGoogleGenerativeAI({
-        temperature: 0.0,
-        model: 'gemini-1.5-pro-latest', // context window 1M
-        apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY
-      })
+
     default:
       throw new Error(`Unsupported model type: ${modelType}`)
   }

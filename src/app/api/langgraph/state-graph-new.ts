@@ -7,13 +7,11 @@ import {
   StateGraph
 } from '@langchain/langgraph'
 import { AIMessage, BaseMessage } from '@langchain/core/messages'
-import { ChatOpenAI } from '@langchain/openai'
-import { TavilySearchResults } from '@langchain/community/tools/tavily_search'
 
-const llm = new ChatOpenAI({
-  model: 'gpt-4o-mini',
-  temperature: 0
-})
+import { TavilySearchResults } from '@langchain/community/tools/tavily_search'
+import { chatModel } from '@/lib/models/langchain_llms'
+
+const llm = chatModel('gpt-4o-mini')
 
 const webSearchTool = new TavilySearchResults({
   maxResults: 4
