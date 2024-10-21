@@ -83,6 +83,7 @@
     "@types/uuid": "^10.0.0",
     "eslint": "^9.10.0",
     "eslint-config-next": "14.2.11",
+    "eslint-plugin-jsdoc": "^50.4.3",
     "postcss": "^8.4.47",
     "prisma": "^5.19.0",
     "react-hook-form": "^7.53.0",
